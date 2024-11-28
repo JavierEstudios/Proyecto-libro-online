@@ -1,0 +1,15 @@
+{% extends 'libro/base.html' %}
+
+{% block title %}
+    <title>Fabulivum - {{ capitulo.titulo }}</title>
+    <meta name="author" content="Javier Farré Avilés, {{ capitulo.libro.autor.name }}">
+{% endblock %}
+
+{% block content %}
+    <h1>{{ capitulo.titulo }}</h1>
+    <h2>{{ capitulo.libro.titulo }} - {{ capitulo.libro.autor.name }}</h2>
+    <p>{{ capitulo.texto_principal }}</p>
+    {% for capitulo in precuelas %}
+        <li>
+    {% endfor %}
+{% endblock %}

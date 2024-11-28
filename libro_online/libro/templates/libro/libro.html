@@ -1,0 +1,22 @@
+{% extends 'libro/base.html' %}
+
+{% block title %}
+    <title>Fabulivum - {{ libro.titulo }}</title>
+    <meta name="author" content="Javier Farré Avilés, {{ libro.autor.name }}">
+{% endblock %}
+
+{% block content %}
+    <h1>Fabulivum</h1>
+    <h2>{{ libro.titulo }}</h2>
+    <h3>Sinopsis</h3>
+    <p>{{ libro.descripcion }}</p>
+    <p>Inicio de publicación: {{ libro.inicio_publicacion }}</p>
+    {% if libro.fin_publicacion is not empty %}
+        <p>Fin de publicación: {{ libro.fin_publicacion }}</p>
+    {% endif %}
+    <ol>
+        {% for capitulo in object_list %}
+            <li><a href="{% url 'libro' pk=libro.pk %}">{{ capitulo.titulo }}</a></li>
+        {% endfor %}
+    </ol>
+{% endblock %}

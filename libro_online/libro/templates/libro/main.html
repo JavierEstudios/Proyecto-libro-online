@@ -1,0 +1,12 @@
+{% extends 'libro/base.html' %}
+
+{% block title %}
+    <title>Fabulivum</title>
+    <meta name="author" content="Javier Farré Avilés">
+{% endblock %}
+
+{% block content %}
+    <h1>Fabulivum</h1>
+    <p><a href="{% url 'lista_de_libros' %}">Libros</a></p>
+    <p><a href="{% url 'lista_de_autores' %}">Autores</a></p>
+{% endblock %}
