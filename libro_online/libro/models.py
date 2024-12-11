@@ -10,12 +10,12 @@ class Autor(models.Model):
     sobre_mi = models.CharField(max_length=2000)
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True)
     def __str__(self):
-        return self.username
+        return self.usuario.username
     
 class Lector(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True)
     def __str__(self):
-        return self.username
+        return self.usuario.username
 
 class Libro(models.Model):
     titulo = models.CharField(max_length=50)
@@ -34,6 +34,7 @@ class Capitulo(models.Model):
     texto_principal = models.TextField()
     fecha_publicacion = models.DateField()
     autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
+    lector = models.ManyToManyField(Lector, through="Lector_Capitulo")
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
     secuela_de = models.ManyToManyField("self")
     def __str__(self):
@@ -47,4 +48,9 @@ class Lector_Libro(models.Model):
     favorito = models.BooleanField(default=False)
     lector = models.ForeignKey(Lector, on_delete=models.CASCADE)
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
+    
+class Lector_Capitulo(models.Model):
+    leido = models.BooleanField(default=False)
+    lector = models.ForeignKey(Lector, on_delete=models.CASCADE)
+    capitulo = models.ForeignKey(Capitulo, on_delete=models.CASCADE)
     
