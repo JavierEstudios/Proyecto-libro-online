@@ -21,7 +21,7 @@ class Libro(models.Model):
     titulo = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=2000)
     portada = models.ImageField(blank=True)
-    inicio_publicacion = models.DateField()
+    inicio_publicacion = models.DateField(auto_now_add=True)
     fin_publicacion = models.DateField(blank=True)
     autores = models.ManyToManyField(Autor)
     lectores = models.ManyToManyField(Lector, through="Lector_Libro")
