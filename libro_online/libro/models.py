@@ -32,7 +32,7 @@ class Capitulo(models.Model):
     titulo = models.CharField(max_length=50)
     numero = models.IntegerField(default=1)
     texto_principal = models.TextField()
-    fecha_publicacion = models.DateField()
+    fecha_publicacion = models.DateField(auto_now_add=True)
     autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
     lector = models.ManyToManyField(Lector, through="Lector_Capitulo")
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)

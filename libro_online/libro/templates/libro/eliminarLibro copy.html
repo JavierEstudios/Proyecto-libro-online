@@ -1,0 +1,14 @@
+{% extends 'libro/base.html' %}
+
+{% block title %}
+    <title>Fabulivum - Editar {{ capitulo.titulo }}</title>
+    <meta name="author" content="Javier Farré Avilés">
+{% endblock %}
+
+{% block content %}
+    <h1>Eliminar {{ capitulo.titulo }}</h1>
+    <form method="POST">{% csrf_token %}
+        <p>¿Seguro que quieres hacerlo?</p>
+        <button type="submit">Eliminar</button>
+    </form>
+{% endblock %}

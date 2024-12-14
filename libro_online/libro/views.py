@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
@@ -6,7 +6,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 ##from django.contrib.auth.mixins import LoginRequiredMixin
 from libro.models import Autor, Lector, Libro, Capitulo
-from libro.forms import NuevoLibroForm, EditarLibroForm
+from libro.forms import NuevoLibroForm, EditarLibroForm, CapituloForm
 
 class pagina_principal(TemplateView):
     template_name = "libro/main.html"
@@ -33,6 +33,7 @@ class crear_libro(CreateView):
     template_name = "libro/nuevoLibro.html"
     
     def form_valid(self, form):
+        #TODO añadir autor
         return super().form_valid(form)
     
 class editar_libro(UpdateView):
@@ -43,6 +44,26 @@ class editar_libro(UpdateView):
 class eliminar_libro(DeleteView):
     model = Libro
     template_name = "libro/eliminarLibro.html"
+    success_url = reverse_lazy("autor")
+    
+class crear_capitulo(CreateView):
+    model = Capitulo
+    form_class = CapituloForm
+    template_name = "capitulo/nuevoCapitulo.html"
+    
+    def form_valid(self, form):
+        #TODO añadir autor        
+        form.instance.libro = get_object_or_404(Libro, pk=self.kwargs['pk'])
+        return super().form_valid(form)
+    
+class editar_capitulo(UpdateView):
+    model = Capitulo
+    form_class = CapituloForm
+    template_name = "capitulo/editarCapitulo.html"
+    
+class eliminar_capitulo(DeleteView):
+    model = Capitulo
+    template_name = "capitulo/eliminarCapitulo.html"
     success_url = reverse_lazy("autor")
     
 class lista_autores(ListView):
