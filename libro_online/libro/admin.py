@@ -29,7 +29,7 @@ class LibroAdmin(admin.ModelAdmin):
     
 class CapituloAdmin(admin.ModelAdmin):
     inlines = [LectorCapituloInLine]
-    ordering = ['titulo']
+    ordering = ['numero']
 
 admin.site.register(Autor, AutorAdmin)
 admin.site.register(Lector, LectorAdmin)

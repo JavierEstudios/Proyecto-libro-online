@@ -1,0 +1,14 @@
+{% extends 'libro/base.html' %}
+
+{% block title %}
+    <title>Fabulivum - Editar {{ lector.titulo }}</title>
+    <meta name="author" content="Javier Farré Avilés">
+{% endblock %}
+
+{% block content %}
+    <h1>Editar {{ lector.titulo }}</h1>
+    <form method="POST">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Editar</button>
+    </form>
+{% endblock %}
