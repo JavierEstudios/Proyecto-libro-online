@@ -8,8 +8,15 @@
 {% block content %}
     <h1>{{ capitulo.titulo }}</h1>
     <h2>{{ capitulo.libro.titulo }} - {{ capitulo.libro.autor.name }}</h2>
+    {% for precuela in secuela_de %}
+        {% if precuela.numero < capitulo.numero %}
+            <p><a href="{% url 'capitulo' pk=precuela.pk %}">{{ precuela.titulo }}</a></p>
+        {% endif %}
+    {% endfor %}
     <p>{{ capitulo.texto_principal }}</p>
-    {% for capitulo in precuelas %}
-        <li>
+    {% for secuela in secuela_de %}
+        {% if secuela.numero > capitulo.numero %}
+            <p><a href="{% url 'capitulo' pk=secuela.pk %}">{{ secuela.titulo }}</a></p>
+        {% endif %}
     {% endfor %}
 {% endblock %}
