@@ -1,5 +1,5 @@
 from django import forms
-from .models import Autor, Lector, Libro, Capitulo
+from .models import Usuario, Autor, Libro, Capitulo
 
 class NuevoLibroForm(forms.ModelForm):
     class Meta:
@@ -16,40 +16,28 @@ class CapituloForm(forms.ModelForm):
         model = Capitulo
         fields = ['titulo','numero','texto_principal','secuela_de']
         
-class NuevoAutorForm(forms.ModelForm):
+class NuevoUsuarioForm(forms.ModelForm):
     class Meta:
-        model = Autor
-        fields = ['username', 'password', 'imagen_perfil', 'sobre_mi']
-    
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])
-
-        if commit:
-            user.save()
-
-        return user
-        
-class EditarAutorForm(forms.ModelForm):
-    class Meta:
-        model = Autor
-        fields = ['username', 'imagen_perfil', 'sobre_mi']
-        
-class NuevoLectorForm(forms.ModelForm):
-    class Meta:
-        model = Lector
+        model = Usuario
         fields = ['username', 'password']
     
     def save(self, commit=True):
         user = super().save(commit=False)
+        user.es_autor = True
         user.set_password(self.cleaned_data['password'])
-
         if commit:
             user.save()
 
         return user
         
-class EditarLectorForm(forms.ModelForm):
+class EditarUsuarioForm(forms.ModelForm):
     class Meta:
-        model = Lector
+        model = Usuario
         fields = ['username']
+        
+class AutorForm(forms.ModelForm):
+    class Meta:
+        model = Autor
+        fields = ['imagen_perfil', 'sobre_mi']
+        
+AutorFormset = forms.modelformset_factory(Autor, form=AutorForm)

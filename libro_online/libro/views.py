@@ -5,8 +5,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from libro.models import Autor, Lector, Libro, Capitulo
-from libro.forms import NuevoLibroForm, EditarLibroForm, CapituloForm, NuevoAutorForm, EditarAutorForm, NuevoLectorForm, EditarLectorForm
+from libro.models import Usuario, Autor, Lector, Libro, Capitulo
+from libro.forms import NuevoLibroForm, EditarLibroForm, CapituloForm, NuevoUsuarioForm, EditarUsuarioForm, AutorFormset
 
 class pagina_principal(TemplateView):
     template_name = "libro/main.html"
@@ -67,31 +67,76 @@ class eliminar_capitulo(LoginRequiredMixin,DeleteView):
     success_url = reverse_lazy("libro")
     
 class crear_autor(CreateView):
-    model = Autor
-    form_class = NuevoAutorForm
+    model = Usuario
+    form_class = NuevoUsuarioForm
     template_name = "autor/nuevoAutor.html"
     
+    def get_context_data(self, **kwargs):
+        data = super(crear_autor, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['FormAutor'] = AutorFormset(self.request.POST)
+        else:
+            data['FormAutor'] = AutorFormset()
+        return data
+    
+    def form_valid(self, form):
+        form.instance.es_autor = True
+        context = self.get_context_data(form=form)
+        formset = context['FormAutor']
+        if formset.is_valid():
+            response = super().form_valid(form)
+            formset.instance = self.object
+            formset.save()
+            return response
+        else:
+            return super().form_invalid(form)
+    
 class editar_autor(LoginRequiredMixin,UpdateView):
-    model = Autor
-    form_class = EditarAutorForm
+    model = Usuario
+    form_class = EditarUsuarioForm
     template_name = "autor/editarAutor.html"
     
+    def get_context_data(self, **kwargs):
+        data = super(crear_autor, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['FormAutor'] = AutorFormset(self.request.POST, instance=self.object)
+            data['FormAutor'].full_clean()
+        else:
+            data['FormAutor'] = AutorFormset()
+        return data
+    
+    def form_valid(self, form):
+        form.instance.es_autor = True
+        context = self.get_context_data(form=form)
+        formset = context['FormAutor']
+        if formset.is_valid():
+            response = super().form_valid(form)
+            formset.instance = self.object
+            formset.save()
+            return response
+        else:
+            return super().form_invalid(form)
+    
 class eliminar_autor(LoginRequiredMixin,DeleteView):
-    model = Autor
+    model = Usuario
     template_name = "autor/eliminarAutor.html"
     
 class crear_lector(CreateView):
-    model = Lector
-    form_class = NuevoLectorForm
+    model = Usuario
+    form_class = NuevoUsuarioForm
     template_name = "lector/nuevoLector.html"
     
+    def form_valid(self, form):
+        form.instance.es_lector = True
+        return super().form_valid(form)
+    
 class editar_lector(LoginRequiredMixin,UpdateView):
-    model = Lector
-    form_class = EditarLectorForm
+    model = Usuario
+    form_class = EditarUsuarioForm
     template_name = "lector/editarLector.html"
     
 class eliminar_lector(LoginRequiredMixin,DeleteView):
-    model = Lector
+    model = Usuario
     template_name = "lector/eliminarLector.html"
     
 class lista_autores(ListView):

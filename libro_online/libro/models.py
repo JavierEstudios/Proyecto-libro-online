@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.dispatch import receiver
 
 class Usuario(AbstractUser):
     es_autor = models.BooleanField(default=False)
@@ -12,10 +13,28 @@ class Autor(models.Model):
     def __str__(self):
         return self.usuario.username
     
+    @receiver(models.signals.post_save, sender = Usuario)
+    def crear_autor(sender, instance, created, **kwargs):
+        if created:
+            Autor.objects.create(user=instance)
+    
+    @receiver(models.signals.post_save, sender = Usuario)
+    def guardar_autor(semder, instance, **kwargs):
+        instance.autor.save()
+    
 class Lector(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True)
     def __str__(self):
         return self.usuario.username
+    
+    @receiver(models.signals.post_save, sender = Usuario)
+    def crear_lector(sender, instance, created, **kwargs):
+        if created:
+            Lector.objects.create(user=instance)
+    
+    @receiver(models.signals.post_save, sender = Usuario)
+    def guardar_lector(semder, instance, **kwargs):
+        instance.lector.save()
 
 class Libro(models.Model):
     titulo = models.CharField(max_length=50)
