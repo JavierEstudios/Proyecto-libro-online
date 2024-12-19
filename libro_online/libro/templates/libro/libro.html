@@ -2,7 +2,7 @@
 
 {% block title %}
     <title>Fabulivum - {{ libro.titulo }}</title>
-    <meta name="author" content="Javier Farré Avilés, {{ libro.autor.name }}">
+    <meta name="author" content="Javier Farré Avilés{% for author in libro.autor %}, {{ author.usuario.username }}{% endfor %}.">
 {% endblock %}
 
 {% block content %}
@@ -14,9 +14,21 @@
     {% if libro.fin_publicacion is not empty %}
         <p>Fin de publicación: {{ libro.fin_publicacion }}</p>
     {% endif %}
+    {% if self in libro.autor %}
+        <p><a href = "{% url 'editar_el_libro' pk=libro.pk %}">Editar libro</a></p>
+        {% if libro.fin_publicacion is empty %}
+            <p><a href = "{% url 'nuevo_capitulo' libro=libro.pk %}">Nuevo Capitulo</a></p>
+            <!--TODO vista para añadir el fin de publicación-->
+            <p><form action="{% url '' %}" method="post">{% csrf_token %}<button>Fin de publicación</button></form></p>
+        {% endif %}
+    {% endif %}
     <ol>
         {% for capitulo in object_list %}
-            <li><a href="{% url 'capitulo' pk=capitulo.pk %}">{{ capitulo.titulo }}</a></li>
+            <li><a href="{% url 'capitulo' pk=capitulo.pk %}">{{ capitulo.titulo }}</a>
+                {% if capitulo.autor = self %}
+                     - <a href="{% url 'editar_el_capitulo' pk=capitulo.pk %}">Editar capitulo</a>
+                     - <a href="{% url 'eliminar_el_capitulo' pk=capitulo.pk %}">Eliminar capitulo</a>
+                {% endif %}</li>
         {% endfor %}
     </ol>
 {% endblock %}

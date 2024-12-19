@@ -144,7 +144,7 @@ class lista_autores(ListView):
     template_name = "libro/listaAutores.html"
     
     def get_queryset(self):
-        return Autor.objects.all().order_by('username')
+        return Autor.objects.all().order_by('usuario')
     
 class detalles_autor(DetailView):
     model = Autor
