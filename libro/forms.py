@@ -19,7 +19,7 @@ class CapituloForm(forms.ModelForm):
 class NuevoUsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields = ['username', 'password']
+        fields = ['username', 'password', 'email']
     
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -33,7 +33,7 @@ class NuevoUsuarioForm(forms.ModelForm):
 class EditarUsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields = ['username']
+        fields = ['username', 'email']
         
 class AutorForm(forms.ModelForm):
     class Meta:

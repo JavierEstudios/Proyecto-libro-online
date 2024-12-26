@@ -1,0 +1,13 @@
+{% extends 'libro/base.html' %}
+
+{% block title %}
+    <title>Registro de usuario</title>
+    <meta name="author" content="Javier Farré Avilés">
+{% endblock %}
+
+{% block content %}
+    <h1>Registro de usuario</h1>
+    <p>
+        <a href="{% url 'nuevo_autor' %}">Nuevo autor</a> - <a href="{% url 'nuevo_lector' %}">Nuevo lector</a>
+    </p>
+{% endblock %}

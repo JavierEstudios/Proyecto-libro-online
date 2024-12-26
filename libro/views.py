@@ -10,6 +10,9 @@ from libro.forms import NuevoLibroForm, EditarLibroForm, CapituloForm, NuevoUsua
 
 class pagina_principal(TemplateView):
     template_name = "libro/main.html"
+    
+class nuevo_usuario(TemplateView):
+    template_name = "libro/nuevoUsuario.html"
 
 class lista_libros(ListView):
     model = Libro
@@ -158,6 +161,11 @@ class detalles_autor(DetailView):
 class detalles_lector(LoginRequiredMixin,DetailView):
     model = Lector
     template_name = ""
+    
+    def get_context_data(self, **kwargs):
+        libros = super().get_context_data(**kwargs)
+        libros["libros"] = Libro.objects.filter(lectores=self.kwargs['pk']).order_by('inicio_publicacion')
+        return libros
     
 class leer_capitulo(DetailView):
     model = Capitulo

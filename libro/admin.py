@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from libro.models import Autor, Lector, Libro, Capitulo, Lector_Libro, Lector_Capitulo
+from libro.models import Usuario, Autor, Lector, Libro, Capitulo, Lector_Libro, Lector_Capitulo
 
 class AutorAdmin(UserAdmin, admin.ModelAdmin):
     list_display = ("usuario__username", "usuario__email", "usuario__first_name", "usuario__last_name", "usuario__is_staff",)
@@ -31,6 +31,7 @@ class CapituloAdmin(admin.ModelAdmin):
     inlines = [LectorCapituloInLine]
     ordering = ['numero']
 
+admin.site.register(Usuario, UserAdmin)
 admin.site.register(Autor, AutorAdmin)
 admin.site.register(Lector, LectorAdmin)
 admin.site.register(Libro, LibroAdmin)
