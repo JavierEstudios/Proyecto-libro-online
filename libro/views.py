@@ -52,7 +52,7 @@ class eliminar_libro(LoginRequiredMixin,DeleteView):
 class crear_capitulo(LoginRequiredMixin,CreateView):
     model = Capitulo
     form_class = CapituloForm
-    template_name = "capitulo/nuevoCapitulo.html"
+    template_name = "libro/nuevoCapitulo.html"
     
     def form_valid(self, form):
         form.instance.autor = self.request.user     
@@ -62,17 +62,17 @@ class crear_capitulo(LoginRequiredMixin,CreateView):
 class editar_capitulo(LoginRequiredMixin,UpdateView):
     model = Capitulo
     form_class = CapituloForm
-    template_name = "capitulo/editarCapitulo.html"
+    template_name = "libro/editarCapitulo.html"
     
 class eliminar_capitulo(LoginRequiredMixin,DeleteView):
     model = Capitulo
-    template_name = "capitulo/eliminarCapitulo.html"
+    template_name = "libro/eliminarCapitulo.html"
     success_url = reverse_lazy("libro")
     
 class crear_autor(CreateView):
     model = Usuario
     form_class = NuevoUsuarioForm
-    template_name = "autor/nuevoAutor.html"
+    template_name = "libro/nuevoAutor.html"
     
     def get_context_data(self, **kwargs):
         data = super(crear_autor, self).get_context_data(**kwargs)
@@ -97,7 +97,7 @@ class crear_autor(CreateView):
 class editar_autor(LoginRequiredMixin,UpdateView):
     model = Usuario
     form_class = EditarUsuarioForm
-    template_name = "autor/editarAutor.html"
+    template_name = "libro/editarAutor.html"
     
     def get_context_data(self, **kwargs):
         data = super(crear_autor, self).get_context_data(**kwargs)
@@ -122,12 +122,12 @@ class editar_autor(LoginRequiredMixin,UpdateView):
     
 class eliminar_autor(LoginRequiredMixin,DeleteView):
     model = Usuario
-    template_name = "autor/eliminarAutor.html"
+    template_name = "libro/eliminarAutor.html"
     
 class crear_lector(CreateView):
     model = Usuario
     form_class = NuevoUsuarioForm
-    template_name = "lector/nuevoLector.html"
+    template_name = "libro/nuevoLector.html"
     
     def form_valid(self, form):
         form.instance.es_lector = True
@@ -136,11 +136,11 @@ class crear_lector(CreateView):
 class editar_lector(LoginRequiredMixin,UpdateView):
     model = Usuario
     form_class = EditarUsuarioForm
-    template_name = "lector/editarLector.html"
+    template_name = "libro/editarLector.html"
     
 class eliminar_lector(LoginRequiredMixin,DeleteView):
     model = Usuario
-    template_name = "lector/eliminarLector.html"
+    template_name = "libro/eliminarLector.html"
     
 class lista_autores(ListView):
     model = Autor

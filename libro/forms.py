@@ -17,6 +17,7 @@ class CapituloForm(forms.ModelForm):
         fields = ['titulo','numero','texto_principal','secuela_de']
         
 class NuevoUsuarioForm(forms.ModelForm):
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
     class Meta:
         model = Usuario
         fields = ['username', 'password', 'email']

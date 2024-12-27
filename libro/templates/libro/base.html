@@ -13,7 +13,12 @@
         <p>
             <form action="{% url 'logout' %}" method="post">{% csrf_token %}
                 <button type="submit">Log out</button>
-            </form> - <a href="{% url 'perfil_de_usuario' pk=user.pk %}">{{ user.username }}</a>
+            </form> - 
+            {% if user.es_autor == True %}
+                <a href="{% url 'autor' pk=user.pk %}">{{ user.username }}</a>
+            {% elif user.es_lector == True %}
+                <a href="{% url 'lector' pk=user.pk %}">{{ user.username }}</a>
+            {% endif %}
         </p>
     {% else %}
         <p>

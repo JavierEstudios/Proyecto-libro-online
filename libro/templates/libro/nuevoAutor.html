@@ -9,6 +9,7 @@
     <h1>Nuevo autor</h1>
     <form method="POST">{% csrf_token %}
         {{ form.as_p }}
+        {{ FormAutor.as_p }}
         <button type="submit">Crear</button>
     </form>
 {% endblock %}
