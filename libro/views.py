@@ -5,8 +5,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from libro.models import Usuario, Autor, Lector, Libro, Capitulo
-from libro.forms import NuevoLibroForm, EditarLibroForm, CapituloForm, NuevoUsuarioForm, EditarUsuarioForm, AutorFormset
+from libro.models import Usuario, Libro, Capitulo
+from libro.forms import NuevoLibroForm, EditarLibroForm, CapituloForm, NuevoUsuarioForm, EditarUsuarioForm
 
 class pagina_principal(TemplateView):
     template_name = "libro/main.html"
@@ -74,51 +74,10 @@ class crear_usuario(CreateView):
     form_class = NuevoUsuarioForm
     template_name = "libro/nuevoAutor.html"
     
-    def get_context_data(self, **kwargs):
-        data = super(crear_usuario, self).get_context_data(**kwargs)
-        if self.request.POST:
-            data['FormAutor'] = AutorFormset(self.request.POST)
-        else:
-            data['FormAutor'] = AutorFormset()
-        return data
-    
-    def form_valid(self, form):
-        form.instance.es_autor = True
-        context = self.get_context_data(form=form)
-        formset = context['FormAutor']
-        if formset.is_valid():
-            response = super().form_valid(form)
-            formset.instance = self.object
-            formset.save()
-            return response
-        else:
-            return super().form_invalid(form)
-    
 class editar_usuario(LoginRequiredMixin,UpdateView):
     model = Usuario
     form_class = EditarUsuarioForm
     template_name = "libro/editarAutor.html"
-    
-    def get_context_data(self, **kwargs):
-        data = super(editar_usuario, self).get_context_data(**kwargs)
-        if self.request.POST:
-            data['FormAutor'] = AutorFormset(self.request.POST, instance=self.object)
-            data['FormAutor'].full_clean()
-        else:
-            data['FormAutor'] = AutorFormset()
-        return data
-    
-    def form_valid(self, form):
-        form.instance.es_autor = True
-        context = self.get_context_data(form=form)
-        formset = context['FormAutor']
-        if formset.is_valid():
-            response = super().form_valid(form)
-            formset.instance = self.object
-            formset.save()
-            return response
-        else:
-            return super().form_invalid(form)
     
 class eliminar_usuario(LoginRequiredMixin,DeleteView):
     model = Usuario
@@ -126,28 +85,19 @@ class eliminar_usuario(LoginRequiredMixin,DeleteView):
     success_url = reverse_lazy("libro")
     
 class lista_autores(ListView):
-    model = Autor
+    model = Usuario
     template_name = "libro/listaAutores.html"
     
     def get_queryset(self):
-        return Autor.objects.all().order_by('usuario')
+        return Usuario.objects.all().order_by('username')
     
-class detalles_autor(DetailView):
-    model = Autor
+class detalles_usuario(DetailView):
+    model = Usuario
     template_name = "libro/autor.html"
     
     def get_context_data(self, **kwargs):
         libros = super().get_context_data(**kwargs)
         libros["libros"] = Libro.objects.filter(autores=self.kwargs['pk']).order_by('inicio_publicacion')
-        return libros
-    
-class detalles_lector(LoginRequiredMixin,DetailView):
-    model = Lector
-    template_name = ""
-    
-    def get_context_data(self, **kwargs):
-        libros = super().get_context_data(**kwargs)
-        libros["libros"] = Libro.objects.filter(lectores=self.kwargs['pk']).order_by('inicio_publicacion')
         return libros
     
 class leer_capitulo(DetailView):
