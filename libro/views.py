@@ -123,6 +123,7 @@ class editar_autor(LoginRequiredMixin,UpdateView):
 class eliminar_autor(LoginRequiredMixin,DeleteView):
     model = Usuario
     template_name = "libro/eliminarAutor.html"
+    success_url = reverse_lazy("pagina_de_inicio")
     
 class crear_lector(CreateView):
     model = Usuario
@@ -141,6 +142,7 @@ class editar_lector(LoginRequiredMixin,UpdateView):
 class eliminar_lector(LoginRequiredMixin,DeleteView):
     model = Usuario
     template_name = "libro/eliminarLector.html"
+    success_url = reverse_lazy("pagina_de_inicio")
     
 class lista_autores(ListView):
     model = Autor

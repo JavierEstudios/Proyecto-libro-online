@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
 
 class Usuario(AbstractUser):
     es_autor = models.BooleanField(default=False)
@@ -12,12 +13,18 @@ class Autor(models.Model):
     USERNAME_FIELD = 'usuario__username'
     def __str__(self):
         return self.usuario.username
+
+    def get_absolute_url(self):
+        return reverse("autor", kwargs={'pk':self.pk})
     
 class Lector(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True)
     USERNAME_FIELD = 'usuario__username'
     def __str__(self):
         return self.usuario.username
+    
+    def get_absolute_url(self):
+        return reverse("lector", kwargs={'pk':self.pk})
 
 class Libro(models.Model):
     titulo = models.CharField(max_length=50)
