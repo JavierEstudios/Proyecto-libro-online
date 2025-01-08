@@ -1,13 +1,14 @@
 {% extends 'libro/base.html' %}
 
 {% block title %}
-    <title>Registro de usuario</title>
+    <title>Fabulivum - Nuevo usuario</title>
     <meta name="author" content="Javier Farré Avilés">
 {% endblock %}
 
 {% block content %}
-    <h1>Registro de usuario</h1>
-    <p>
-        <a href="{% url 'nuevo_autor' %}">Nuevo autor</a> - <a href="{% url 'nuevo_lector' %}">Nuevo lector</a>
-    </p>
+    <h1>Nuevo autor</h1>
+    <form method="POST">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Crear</button>
+    </form>
 {% endblock %}

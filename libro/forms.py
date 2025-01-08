@@ -1,5 +1,5 @@
 from django import forms
-from .models import Usuario, Autor, Libro, Capitulo
+from .models import Usuario, Libro, Capitulo
 
 class NuevoLibroForm(forms.ModelForm):
     class Meta:
@@ -20,7 +20,7 @@ class NuevoUsuarioForm(forms.ModelForm):
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
     class Meta:
         model = Usuario
-        fields = ['username', 'password', 'email']
+        fields = ['username', 'password', 'email', 'imagen_perfil', 'sobre_mi']
     
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -34,11 +34,4 @@ class NuevoUsuarioForm(forms.ModelForm):
 class EditarUsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields = ['username', 'email']
-        
-class AutorForm(forms.ModelForm):
-    class Meta:
-        model = Autor
-        fields = ['imagen_perfil', 'sobre_mi']
-        
-AutorFormset = forms.modelformset_factory(Autor, form=AutorForm)
+        fields = ['username', 'email', 'imagen_perfil', 'sobre_mi']

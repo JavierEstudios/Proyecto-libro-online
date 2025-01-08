@@ -69,13 +69,13 @@ class eliminar_capitulo(LoginRequiredMixin,DeleteView):
     template_name = "libro/eliminarCapitulo.html"
     success_url = reverse_lazy("libro")
     
-class crear_autor(CreateView):
+class crear_usuario(CreateView):
     model = Usuario
     form_class = NuevoUsuarioForm
     template_name = "libro/nuevoAutor.html"
     
     def get_context_data(self, **kwargs):
-        data = super(crear_autor, self).get_context_data(**kwargs)
+        data = super(crear_usuario, self).get_context_data(**kwargs)
         if self.request.POST:
             data['FormAutor'] = AutorFormset(self.request.POST)
         else:
@@ -94,13 +94,13 @@ class crear_autor(CreateView):
         else:
             return super().form_invalid(form)
     
-class editar_autor(LoginRequiredMixin,UpdateView):
+class editar_usuario(LoginRequiredMixin,UpdateView):
     model = Usuario
     form_class = EditarUsuarioForm
     template_name = "libro/editarAutor.html"
     
     def get_context_data(self, **kwargs):
-        data = super(crear_autor, self).get_context_data(**kwargs)
+        data = super(editar_usuario, self).get_context_data(**kwargs)
         if self.request.POST:
             data['FormAutor'] = AutorFormset(self.request.POST, instance=self.object)
             data['FormAutor'].full_clean()
@@ -120,27 +120,10 @@ class editar_autor(LoginRequiredMixin,UpdateView):
         else:
             return super().form_invalid(form)
     
-class eliminar_autor(LoginRequiredMixin,DeleteView):
+class eliminar_usuario(LoginRequiredMixin,DeleteView):
     model = Usuario
     template_name = "libro/eliminarAutor.html"
-    
-class crear_lector(CreateView):
-    model = Usuario
-    form_class = NuevoUsuarioForm
-    template_name = "libro/nuevoLector.html"
-    
-    def form_valid(self, form):
-        form.instance.es_lector = True
-        return super().form_valid(form)
-    
-class editar_lector(LoginRequiredMixin,UpdateView):
-    model = Usuario
-    form_class = EditarUsuarioForm
-    template_name = "libro/editarLector.html"
-    
-class eliminar_lector(LoginRequiredMixin,DeleteView):
-    model = Usuario
-    template_name = "libro/eliminarLector.html"
+    success_url = reverse_lazy("libro")
     
 class lista_autores(ListView):
     model = Autor
