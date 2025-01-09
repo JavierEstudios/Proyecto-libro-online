@@ -9,7 +9,7 @@ class Usuario(AbstractUser):
         return self.username
     
     def get_absolute_url(self):
-        return reverse("lector", kwargs={'pk':self.pk})
+        return reverse("usuario", kwargs={'pk':self.pk})
 
 class Libro(models.Model):
     titulo = models.CharField(max_length=50)
@@ -22,6 +22,9 @@ class Libro(models.Model):
     def __str__(self):
         return self.titulo
     
+    def get_absolute_url(self):
+        return reverse("libro", kwargs={'pk':self.pk})
+    
 class Capitulo(models.Model):
     titulo = models.CharField(max_length=50)
     numero = models.IntegerField(default=1)
@@ -33,6 +36,9 @@ class Capitulo(models.Model):
     secuela_de = models.ManyToManyField("self")
     def __str__(self):
         return f"{self.titulo} - {self.libro.titulo}"
+    
+    def get_absolute_url(self):
+        return reverse("capitulo", kwargs={'pk':self.pk})
     
 class Lector_Libro(models.Model):
     CHOICES_RELACION = {"TBR": "Pendiente de Lectura",

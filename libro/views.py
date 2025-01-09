@@ -47,7 +47,7 @@ class editar_libro(LoginRequiredMixin,UpdateView):
 class eliminar_libro(LoginRequiredMixin,DeleteView):
     model = Libro
     template_name = "libro/eliminarLibro.html"
-    success_url = reverse_lazy("autor")
+    success_url = reverse_lazy("usuario")
     
 class crear_capitulo(LoginRequiredMixin,CreateView):
     model = Capitulo
@@ -72,16 +72,16 @@ class eliminar_capitulo(LoginRequiredMixin,DeleteView):
 class crear_usuario(CreateView):
     model = Usuario
     form_class = NuevoUsuarioForm
-    template_name = "libro/nuevoAutor.html"
+    template_name = "registration/nuevoUsuario.html"
     
 class editar_usuario(LoginRequiredMixin,UpdateView):
     model = Usuario
     form_class = EditarUsuarioForm
-    template_name = "libro/editarAutor.html"
+    template_name = "registration/editarUsuario.html"
     
 class eliminar_usuario(LoginRequiredMixin,DeleteView):
     model = Usuario
-    template_name = "libro/eliminarAutor.html"
+    template_name = "registration/eliminarUsuario.html"
     success_url = reverse_lazy("libro")
     
 class lista_autores(ListView):
@@ -93,7 +93,7 @@ class lista_autores(ListView):
     
 class detalles_usuario(DetailView):
     model = Usuario
-    template_name = "libro/autor.html"
+    template_name = "libro/usuario.html"
     
     def get_context_data(self, **kwargs):
         libros = super().get_context_data(**kwargs)

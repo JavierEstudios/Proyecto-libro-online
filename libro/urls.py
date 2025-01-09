@@ -7,7 +7,7 @@ urlpatterns = [
     path("libros/", lista_libros.as_view(), name="lista_de_libros"),
     path("libro/<int:pk>", detalles_libro.as_view(), name="libro"),
     path("autores/", lista_autores.as_view(), name="lista_de_autores"),
-    path("autor/<int:pk>", detalles_usuario.as_view(), name="autor"),
+    path("usuario/<int:pk>", detalles_usuario.as_view(), name="usuario"),
     path("capitulo/<int:pk>", leer_capitulo.as_view(), name="capitulo"),
     ##CRUDS
     path("libro/nuevo/", crear_libro.as_view(), name="nuevo_libro"),
@@ -16,7 +16,7 @@ urlpatterns = [
     path("capitulo/nuevo/<int:libro>", crear_capitulo.as_view(), name="nuevo_capitulo"),
     path("capitulo/editar/<int:pk>", editar_capitulo.as_view(), name="editar_el_capitulo"),
     path("capitulo/eliminar/<int:pk>", eliminar_capitulo.as_view(), name="eliminar_el_capitulo"),
-    path("autor/nuevo/", crear_usuario.as_view(), name="nuevo_autor"),
-    path("autor/editar/<int:pk>", editar_usuario.as_view(), name="editar_el_autor"),
-    path("autor/eliminar/<int:pk>", eliminar_usuario.as_view(), name="eliminar_el_autor"),
+    path("usuario/nuevo/", crear_usuario.as_view(), name="nuevo_usuario"),
+    path("usuario/editar/<int:pk>", editar_usuario.as_view(), name="editar_el_usuario"),
+    path("usuario/eliminar/<int:pk>", eliminar_usuario.as_view(), name="eliminar_el_usuario"),
 ]

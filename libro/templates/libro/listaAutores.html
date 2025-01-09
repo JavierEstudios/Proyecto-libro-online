@@ -9,8 +9,8 @@
     <h1>Fabulivum</h1>
     <h2>Lista de autores</h2>
     <ul>
-        {% for autor in object_list %}
-            <li><a href="{% url 'autor' pk=autor.pk %}">{{ autor.usuario.username }}</a></li>
+        {% for usuario in object_list %}
+            <li><a href="{% url 'usuario' pk=usuario.pk %}">{{ usuario.username }}</a></li>
         {% empty %}
             <li>No hay autores</li>
         {% endfor %}

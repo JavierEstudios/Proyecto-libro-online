@@ -10,9 +10,16 @@
     <h2>{{ usuario.username }}</h2>
     <p>Sobre mí</p>
     <p>{{ usuario.sobre_mi }}</p>
+    {% if usuario.pk == user.pk %}
+        <p>
+            <a href="{% url 'editar_el_usuario' pk=usuario.pk %}">Editar</a>
+            <a href="{% url 'eliminar_el_usuario' pk=usuario.pk %}">Eliminar</a>
+        </p>
+    {% endif %}
     <ul>
         {% for libro in object_list %}
             <li><a href="{% url 'usuario' pk=usuario.pk %}">{{ libro.titulo }}</a></li>
         {% endfor %}
     </ul>
+    <p><a href="{% url 'pagina_de_inicio' %}">Pagina de inicio</a></p>
 {% endblock %}

@@ -1,5 +1,4 @@
 db.sqlite3
 __pycache__
 0001_initial.py
-0002_lector_capitulo_capitulo_lector.py
-0003_alter_capitulo_fecha_publicacion_and_more.py
+media/

@@ -1,14 +1,14 @@
-{% extends 'libro/base.html' %}
+{% extends 'registration/base.html' %}
 
 {% block title %}
-    <title>Fabulivum - Editar {{ usuario.username }}</title>
+    <title>Fabulivum - Nuevo usuario</title>
     <meta name="author" content="Javier Farré Avilés">
 {% endblock %}
 
 {% block content %}
-    <h1>Editar {{ usuario.username }}</h1>
+    <h1>Nuevo usuario</h1>
     <form method="POST">{% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Editar</button>
+        <button type="submit">Crear</button>
     </form>
 {% endblock %}
