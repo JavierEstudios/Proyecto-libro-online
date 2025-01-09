@@ -2,7 +2,7 @@
 
 {% block title %}
     <title>Fabulivum - {{ libro.titulo }}</title>
-    <meta name="author" content="Javier Farré Avilés{% for author in libro.autor %}, {{ author.usuario.username }}{% endfor %}.">
+    <meta name="author" content="Javier Farré Avilés{% for usuario in libro.autor %}, {{ usuario.username }}{% endfor %}.">
 {% endblock %}
 
 {% block content %}
