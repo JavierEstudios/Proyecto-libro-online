@@ -6,13 +6,10 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from libro.models import Usuario, Libro, Capitulo
-from libro.forms import NuevoLibroForm, EditarLibroForm, CapituloForm, NuevoUsuarioForm, EditarUsuarioForm
+from libro.forms import LibroForm, CapituloForm, NuevoUsuarioForm, EditarUsuarioForm
 
 class pagina_principal(TemplateView):
     template_name = "libro/main.html"
-    
-class nuevo_usuario(TemplateView):
-    template_name = "libro/nuevoUsuario.html"
 
 class lista_libros(ListView):
     model = Libro
@@ -32,7 +29,7 @@ class detalles_libro(DetailView):
     
 class crear_libro(LoginRequiredMixin,CreateView):
     model = Libro
-    form_class = NuevoLibroForm
+    form_class = LibroForm
     template_name = "libro/nuevoLibro.html"
     
     def form_valid(self, form):
@@ -41,7 +38,7 @@ class crear_libro(LoginRequiredMixin,CreateView):
     
 class editar_libro(LoginRequiredMixin,UpdateView):
     model = Libro
-    form_class = EditarLibroForm
+    form_class = LibroForm
     template_name = "libro/editarLibro.html"
     
 class eliminar_libro(LoginRequiredMixin,DeleteView):
@@ -55,8 +52,8 @@ class crear_capitulo(LoginRequiredMixin,CreateView):
     template_name = "libro/nuevoCapitulo.html"
     
     def form_valid(self, form):
-        form.instance.autor = self.request.user     
-        form.instance.libro = get_object_or_404(Libro, pk=self.kwargs['pk'])
+        form.instance.autor = self.request.user
+        form.instance.libro = get_object_or_404(Libro, pk=self.kwargs['libro'])
         return super().form_valid(form)
     
 class editar_capitulo(LoginRequiredMixin,UpdateView):
@@ -89,7 +86,7 @@ class lista_autores(ListView):
     template_name = "libro/listaAutores.html"
     
     def get_queryset(self):
-        return Usuario.objects.all().order_by('username')
+        return Usuario.objects.filter().order_by('username') ##TODO: Filtrar por usuarios con libros
     
 class detalles_usuario(DetailView):
     model = Usuario
@@ -97,7 +94,7 @@ class detalles_usuario(DetailView):
     
     def get_context_data(self, **kwargs):
         libros = super().get_context_data(**kwargs)
-        libros["libros"] = Libro.objects.filter(autores=self.kwargs['pk']).order_by('inicio_publicacion')
+        libros["libros"] = Libro.objects.filter(autor=self.kwargs['pk']).order_by('inicio_publicacion')
         return libros
     
 class leer_capitulo(DetailView):
@@ -106,6 +103,5 @@ class leer_capitulo(DetailView):
 
     def get_context_data(self, **kwargs):
         capitulos = super().get_context_data(**kwargs)
-        capitulos["precuelas"] = Capitulo.objects.filter(secuela_de=self.kwargs['pk']).order_by('inicio_publicacion')
-        capitulos["secuelas"] = Capitulo.objects.filter(capitulos=self.kwargs['pk']).order_by('inicio_publicacion')
+        capitulos["secuela_de"] = Capitulo.objects.filter(secuela_de=self.kwargs['pk']).order_by('fecha_publicacion')
         return capitulos

@@ -17,8 +17,8 @@
         </p>
     {% endif %}
     <ul>
-        {% for libro in object_list %}
-            <li><a href="{% url 'usuario' pk=usuario.pk %}">{{ libro.titulo }}</a></li>
+        {% for libro in libros %}
+            <li><a href="{% url 'libro' pk=libro.pk %}">{{ libro.titulo }}</a></li>
         {% endfor %}
     </ul>
     <p><a href="{% url 'pagina_de_inicio' %}">Pagina de inicio</a></p>

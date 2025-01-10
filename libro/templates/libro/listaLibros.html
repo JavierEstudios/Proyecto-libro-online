@@ -8,11 +8,11 @@
 {% block content %}
     <h1>Fabulivum</h1>
     <h2>Lista de libros</h2>
-    <ol>
+    <ul>
         {% for libro in object_list %}
             <li><a href="{% url 'libro' pk=libro.pk %}">{{ libro.titulo }}</a></li>
         {% empty %}
             <li>No hay libros</li>
         {% endfor %}
-    </ol>
+    </ul>
 {% endblock %}

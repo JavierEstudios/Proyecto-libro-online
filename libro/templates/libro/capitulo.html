@@ -2,12 +2,12 @@
 
 {% block title %}
     <title>Fabulivum - {{ capitulo.titulo }}</title>
-    <meta name="author" content="Javier Farré Avilés, {{ capitulo.libro.autor.name }}">
+    <meta name="author" content="Javier Farré Avilés, {{ capitulo.autor.username }}">
 {% endblock %}
 
 {% block content %}
     <h1>{{ capitulo.titulo }}</h1>
-    <h2>{{ capitulo.libro.titulo }} - {{ capitulo.libro.autor.name }}</h2>
+    <h2>{{ capitulo.libro.titulo }} - {{ capitulo.autor.username }}</h2>
     {% for precuela in secuela_de %}
         {% if precuela.numero < capitulo.numero %}
             <p><a href="{% url 'capitulo' pk=precuela.pk %}">{{ precuela.titulo }}</a></p>
