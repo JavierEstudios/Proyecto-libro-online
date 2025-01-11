@@ -5,6 +5,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from datetime import date
 from libro.models import Usuario, Libro, Capitulo
 from libro.forms import LibroForm, CapituloForm, NuevoUsuarioForm, EditarUsuarioForm
 
@@ -41,6 +42,13 @@ class editar_libro(LoginRequiredMixin,UpdateView):
     form_class = LibroForm
     template_name = "libro/editarLibro.html"
     
+class fin_publicacion(UpdateView):
+    model = Libro
+    
+    def form_valid(self, form):
+        form.instance.fin_publicacion = date.today
+        return super().form_valid(form)
+
 class eliminar_libro(LoginRequiredMixin,DeleteView):
     model = Libro
     template_name = "libro/eliminarLibro.html"
@@ -60,7 +68,7 @@ class editar_capitulo(LoginRequiredMixin,UpdateView):
     model = Capitulo
     form_class = CapituloForm
     template_name = "libro/editarCapitulo.html"
-    
+
 class eliminar_capitulo(LoginRequiredMixin,DeleteView):
     model = Capitulo
     template_name = "libro/eliminarCapitulo.html"

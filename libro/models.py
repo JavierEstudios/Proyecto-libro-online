@@ -33,7 +33,7 @@ class Capitulo(models.Model):
     autor = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="autor_capitulo")
     lectores = models.ManyToManyField(Usuario, through="Lector_Capitulo", related_name="lectores_capitulo")
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
-    secuela_de = models.ManyToManyField("self", blank=True)
+    secuela_de = models.ManyToManyField("self", blank=True, limit_choices_to={'libro':libro})
     def __str__(self):
         return f"{self.titulo} - {self.libro.titulo}"
     
