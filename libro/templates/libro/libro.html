@@ -18,8 +18,9 @@
         <p><a href = "{% url 'editar_el_libro' pk=libro.pk %}">Editar libro</a></p>
         {% if libro.fin_publicacion is empty %}
             <p><a href = "{% url 'nuevo_capitulo' libro=libro.pk %}">Nuevo Capitulo</a></p>
-            <p><form action="{% url 'fin_de_publicacion' %}" method="post">{% csrf_token %}<button>Fin de publicación</button></form></p>
+            <p><form action="{% url 'fin_de_publicacion' pk=libro.pk %}" method="post">{% csrf_token %}<button>Fin de publicación</button></form></p>
         {% endif %}
+        <p><a href="{% url 'eliminar_el_libro' pk=libro.pk %}">Eliminar libro</a></p>
     {% endif %}
     <ol>
         {% for capitulo in capitulos %}

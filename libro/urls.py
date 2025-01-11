@@ -8,7 +8,7 @@ urlpatterns = [
     path("autores/", lista_autores.as_view(), name="lista_de_autores"),
     path("usuario/<int:pk>", detalles_usuario.as_view(), name="usuario"),
     path("capitulo/<int:pk>", leer_capitulo.as_view(), name="capitulo"),
-    path("libro/fin_publicacion", fin_publicacion.as_view(), name="fin_de_publicacion"),
+    path("libro/fin_publicacion/<int:pk>", fin_publicacion, name="fin_de_publicacion"),
     ##CRUDS
     path("libro/nuevo/", crear_libro.as_view(), name="nuevo_libro"),
     path("libro/editar/<int:pk>", editar_libro.as_view(), name="editar_el_libro"),

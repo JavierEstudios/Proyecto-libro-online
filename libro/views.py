@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
@@ -5,7 +6,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from datetime import date
+from django.utils import timezone
 from libro.models import Usuario, Libro, Capitulo
 from libro.forms import LibroForm, CapituloForm, NuevoUsuarioForm, EditarUsuarioForm
 
@@ -17,7 +18,8 @@ class lista_libros(ListView):
     template_name = "libro/listaLibros.html"
     
     def get_queryset(self):
-        return Libro.objects.all().order_by('inicio_publicacion')
+        query = self.request.GET.get("q")
+        return Libro.objects.filter().order_by('inicio_publicacion')
     
 class detalles_libro(DetailView):
     model = Libro
@@ -42,18 +44,18 @@ class editar_libro(LoginRequiredMixin,UpdateView):
     form_class = LibroForm
     template_name = "libro/editarLibro.html"
     
-class fin_publicacion(UpdateView):
-    model = Libro
-    
-    def form_valid(self, form):
-        form.instance.fin_publicacion = date.today
-        return super().form_valid(form)
+def fin_publicacion(request, pk):
+    libro = Libro.objects.get(pk=pk)
+    hoy = timezone.localtime(timezone.now())
+    libro.fin_publicacion = hoy.date()
+    libro.save()
+    return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk}))
 
 class eliminar_libro(LoginRequiredMixin,DeleteView):
     model = Libro
     template_name = "libro/eliminarLibro.html"
-    success_url = reverse_lazy("usuario")
-    
+    success_url = reverse_lazy("pagina_de_inicio")
+
 class crear_capitulo(LoginRequiredMixin,CreateView):
     model = Capitulo
     form_class = CapituloForm
@@ -61,7 +63,7 @@ class crear_capitulo(LoginRequiredMixin,CreateView):
     
     def form_valid(self, form):
         form.instance.autor = self.request.user
-        form.instance.libro = get_object_or_404(Libro, pk=self.kwargs['libro'])
+        form.instance.libro = get_object_or_404(Libro, pk=self.kwargs['autor'])
         return super().form_valid(form)
     
 class editar_capitulo(LoginRequiredMixin,UpdateView):
@@ -72,7 +74,7 @@ class editar_capitulo(LoginRequiredMixin,UpdateView):
 class eliminar_capitulo(LoginRequiredMixin,DeleteView):
     model = Capitulo
     template_name = "libro/eliminarCapitulo.html"
-    success_url = reverse_lazy("libro")
+    success_url = reverse_lazy("pagina_de_inicio")
     
 class crear_usuario(CreateView):
     model = Usuario
@@ -87,7 +89,7 @@ class editar_usuario(LoginRequiredMixin,UpdateView):
 class eliminar_usuario(LoginRequiredMixin,DeleteView):
     model = Usuario
     template_name = "registration/eliminarUsuario.html"
-    success_url = reverse_lazy("libro")
+    success_url = reverse_lazy("pagina_de_inicio")
     
 class lista_autores(ListView):
     model = Usuario
