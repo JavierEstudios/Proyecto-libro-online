@@ -63,7 +63,7 @@ class crear_capitulo(LoginRequiredMixin,CreateView):
     
     def form_valid(self, form):
         form.instance.autor = self.request.user
-        form.instance.libro = get_object_or_404(Libro, pk=self.kwargs['autor'])
+        form.instance.libro = get_object_or_404(Libro, pk=self.kwargs['libro'])
         return super().form_valid(form)
     
 class editar_capitulo(LoginRequiredMixin,UpdateView):
