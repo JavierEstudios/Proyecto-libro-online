@@ -26,9 +26,17 @@ class detalles_libro(DetailView):
     template_name = "libro/libro.html"
     
     def get_context_data(self, **kwargs):
-        capitulos = super().get_context_data(**kwargs)
-        capitulos["capitulos"] = Capitulo.objects.filter(libro=self.kwargs['pk']).order_by('numero')
-        return capitulos
+        contexto = super().get_context_data(**kwargs)
+        contexto["capitulos"] = Capitulo.objects.filter(libro=self.kwargs['pk']).order_by('numero')
+        contexto["capitulos_leidos"] = Capitulo.objects.filter(libro=self.kwargs['pk'], lectores=self.request.user.id)
+        contexto["lectores"] = Usuario.objects.filter(lectores_libro=self.kwargs['pk'])
+        return contexto
+    
+def leyendo_libro(request, pk):
+    lector = Usuario.objects.get(id=request.user.id)
+    libro = Libro.objects.get(pk=pk)
+    libro.lectores.add(lector)
+    return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk}))
     
 class crear_libro(LoginRequiredMixin,CreateView):
     model = Libro
@@ -112,6 +120,16 @@ class leer_capitulo(DetailView):
     template_name = "libro/capitulo.html"
 
     def get_context_data(self, **kwargs):
-        capitulos = super().get_context_data(**kwargs)
-        capitulos["secuela_de"] = Capitulo.objects.filter(secuela_de=self.kwargs['pk']).order_by('fecha_publicacion')
-        return capitulos
+        contexto = super().get_context_data(**kwargs)
+        contexto["secuela_de"] = Capitulo.objects.filter(secuela_de=self.kwargs['pk']).order_by('fecha_publicacion')
+        contexto["lectores"] = Usuario.objects.filter(lectores_capitulo=self.kwargs['pk'])
+        return contexto
+    
+def finalizar_lectura(request, pk, aux):
+    lector = Usuario.objects.get(id=request.user.id)
+    capitulo = Capitulo.objects.get(pk=pk)
+    capitulo.lectores.add(lector)
+    if aux == 0:
+        return HttpResponseRedirect(reverse('libro', kwargs={'pk':capitulo.libro.pk}))
+    else:
+        return HttpResponseRedirect(reverse('capitulo', kwargs={'pk':aux}))

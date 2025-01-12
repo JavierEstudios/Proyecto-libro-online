@@ -10,7 +10,14 @@
     <h2>Lista de libros</h2>
     <ul>
         {% for libro in object_list %}
-            <li><a href="{% url 'libro' pk=libro.pk %}">{{ libro.titulo }}</a> - {{ libro.autor.username }}</li>
+            <li>
+                <a href="{% url 'libro' pk=libro.pk %}">{{ libro.titulo }}</a> - {{ libro.autor.username }}
+                {% if libro.fin_publicacion is empty %}
+                    - En publicación
+                {% else %}
+                    - Finalizado
+                {% endif %}
+            </li>
         {% empty %}
             <li>No hay libros</li>
         {% endfor %}

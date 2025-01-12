@@ -21,6 +21,8 @@
             <p><form action="{% url 'fin_de_publicacion' pk=libro.pk %}" method="post">{% csrf_token %}<button>Fin de publicación</button></form></p>
         {% endif %}
         <p><a href="{% url 'eliminar_el_libro' pk=libro.pk %}">Eliminar libro</a></p>
+    {% elif user.is_authenticated and user not in lectores %}
+        <p><form action="{% url 'leyendo' pk=libro.pk %}" method="post">{% csrf_token %}<button>Leyendo</button></form></p>
     {% endif %}
     <ol>
         {% for capitulo in capitulos %}
@@ -28,7 +30,10 @@
                 {% if capitulo.autor == user %}
                      - <a href="{% url 'editar_el_capitulo' pk=capitulo.pk %}">Editar capitulo</a>
                      - <a href="{% url 'eliminar_el_capitulo' pk=capitulo.pk %}">Eliminar capitulo</a>
-                {% endif %}</li>
+                {% elif user.is_authenticated and capitulo in capitulos_leidos %}
+                     - Leido
+                {% endif %}
+            </li>
         {% endfor %}
     </ol>
 {% endblock %}

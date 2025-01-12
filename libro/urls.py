@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import fin_publicacion, pagina_principal, lista_libros, detalles_libro, lista_autores, detalles_usuario, leer_capitulo, crear_libro, editar_libro, eliminar_libro, crear_capitulo, editar_capitulo, eliminar_capitulo, crear_usuario, editar_usuario, eliminar_usuario
+from .views import leyendo_libro, fin_publicacion, finalizar_lectura, pagina_principal, lista_libros, detalles_libro, lista_autores, detalles_usuario, leer_capitulo, crear_libro, editar_libro, eliminar_libro, crear_capitulo, editar_capitulo, eliminar_capitulo, crear_usuario, editar_usuario, eliminar_usuario
 
 urlpatterns = [
     path("", pagina_principal.as_view(), name="pagina_de_inicio"),
@@ -8,7 +8,9 @@ urlpatterns = [
     path("autores/", lista_autores.as_view(), name="lista_de_autores"),
     path("usuario/<int:pk>", detalles_usuario.as_view(), name="usuario"),
     path("capitulo/<int:pk>", leer_capitulo.as_view(), name="capitulo"),
-    path("libro/fin_publicacion/<int:pk>", fin_publicacion, name="fin_de_publicacion"),
+    path("libro/<int:pk>/leyendo", leyendo_libro, name="leyendo"),
+    path("capitulo/<int:pk>/<int:aux>", finalizar_lectura, name="capitulo_leido"),
+    path("libro/<int:pk>/fin_publicacion", fin_publicacion, name="fin_de_publicacion"),
     ##CRUDS
     path("libro/nuevo/", crear_libro.as_view(), name="nuevo_libro"),
     path("libro/editar/<int:pk>", editar_libro.as_view(), name="editar_el_libro"),
