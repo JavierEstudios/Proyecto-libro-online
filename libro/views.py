@@ -18,8 +18,8 @@ class lista_libros(ListView):
     template_name = "libro/listaLibros.html"
     
     def get_queryset(self):
-        query = self.request.GET.get("q")
-        return Libro.objects.filter().order_by('inicio_publicacion')
+        busqueda = self.request.GET.get("titulo", default="")
+        return Libro.objects.filter(titulo__icontains=busqueda).order_by('inicio_publicacion')
     
 class detalles_libro(DetailView):
     model = Libro

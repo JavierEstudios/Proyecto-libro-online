@@ -8,6 +8,10 @@
 {% block content %}
     <h1>Fabulivum</h1>
     <h2>Lista de libros</h2>
+    <form action="{% url 'lista_de_libros' %}" method="get">
+        <label for="titulo">Buscar por titulo</label>
+        <input type="text" id="titulo" name="titulo" placeholder="Titulo">
+        <button>Buscar</button>
     <ul>
         {% for libro in object_list %}
             <li>
