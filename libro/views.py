@@ -105,7 +105,7 @@ class lista_autores(ListView):
     
     def get_queryset(self):
         busqueda = self.request.GET.get("nombre", default="")
-        return Usuario.objects.filter(autor_libro__gt=0, username__icontains=busqueda).order_by('username')
+        return Usuario.objects.filter(username__icontains=busqueda).exclude(autor_libro__isnull=True).order_by('username')
     
 class detalles_usuario(DetailView):
     model = Usuario
@@ -122,8 +122,9 @@ class leer_capitulo(DetailView):
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
-        contexto["precuelas"] = Capitulo.objects.filter(secuela_de=self.kwargs['pk'], numero__lt=self.kwargs['numero']).order_by('fecha_publicacion')
-        contexto["secuelas"] = Capitulo.objects.filter(secuela_de=self.kwargs['pk'], numero__gt=self.kwargs['numero']).order_by('fecha_publicacion')
+        aux = Capitulo.objects.filter(secuela_de=self.kwargs['pk']).order_by('fecha_publicacion')
+        contexto["precuelas"] = aux.filter(numero__lt=self.kwargs['numero'])
+        contexto["secuelas"] = aux.filter(numero__gt=self.kwargs['numero'])
         contexto["lectores"] = Usuario.objects.filter(lectores_capitulo=self.kwargs['pk'])
         return contexto
     
