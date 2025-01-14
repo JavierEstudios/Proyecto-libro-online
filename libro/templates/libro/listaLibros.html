@@ -6,24 +6,44 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Fabulivum</h1>
+    <h1><a href="{% url 'pagina_de_inicio' %}">Fabulivum</a></h1>
     <h2>Lista de libros</h2>
     <form action="{% url 'lista_de_libros' %}" method="get">
         <label for="titulo">Buscar por titulo</label>
         <input type="text" id="titulo" name="titulo" placeholder="Titulo">
         <button>Buscar</button>
-    <ul>
-        {% for libro in object_list %}
-            <li>
-                <a href="{% url 'libro' pk=libro.pk %}">{{ libro.titulo }}</a> - {{ libro.autor.username }}
-                {% if libro.fin_publicacion is empty %}
-                    - En publicación
-                {% else %}
-                    - Finalizado
-                {% endif %}
-            </li>
-        {% empty %}
-            <li>No hay libros</li>
-        {% endfor %}
-    </ul>
+    </form>
+    {% for libro in object_list %}
+        <div class="row">
+            <div class="col-md-2">
+                <a href="{% url 'libro' pk=libro.pk %}">
+                    {% if libro.portada %}
+                        <img src="{{ libro.portada }}" alt="Portada de {{ libro.titulo }}">
+                    {% else %}
+                        Libro sin portada
+                    {% endif %}
+                    <br/>Ver detalles
+                </a>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col"><strong>Titulo:</strong> {{ libro.titulo }}</div>
+                </div>
+                <div class="row">
+                    <div class="col"><strong>Autor:</strong> {{ libro.autor.username }}</div>
+                </div>
+                <div class="row">
+                    <div class="col"><strong>Estado:</strong> 
+                        {% if libro.fin_publicacion is empty %}
+                            En publicación
+                        {% else %}
+                            Finalizado
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="row"><div class="col">No se han encontrado libros</div></div>
+    {% endfor %}
 {% endblock %}

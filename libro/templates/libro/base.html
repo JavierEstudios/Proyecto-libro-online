@@ -9,18 +9,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 <body>
-    <p><a href="{% url 'pagina_de_inicio' %}">Fabulivum</a></p>
     {% if user.is_authenticated %}
         <p>
             <form action="{% url 'logout' %}" method="post">{% csrf_token %}
+                <a href="{% url 'usuario' pk=user.pk %}">{{ user.username }}</a> - 
                 <button type="submit">Log out</button>
-            </form> - <a href="{% url 'usuario' pk=user.pk %}">{{ user.username }}</a>
+            </form>
         </p>
     {% else %}
         <p>
             <a href="{% url 'nuevo_usuario' %}">Nuevo Usuario</a> - <a href="{% url 'login'%}">Login</a>
         </p>
     {% endif %}
-    {% block content %}
-    {% endblock %}
+    <div class="container" id="base">
+        {% block content %}
+        {% endblock %}
+    </div>
 </body>

@@ -6,34 +6,57 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Fabulivum</h1>
-    <h2>{{ libro.titulo }}</h2>
-    <h3>Sinopsis</h3>
-    <p>{{ libro.descripcion }}</p>
-    <p>Inicio de publicación: {{ libro.inicio_publicacion }}</p>
-    {% if libro.fin_publicacion is not empty %}
-        <p>Fin de publicación: {{ libro.fin_publicacion }}</p>
-    {% endif %}
-    {% if libro.autor == user %}
-        <p><a href = "{% url 'editar_el_libro' pk=libro.pk %}">Editar libro</a></p>
-        {% if libro.fin_publicacion is empty %}
-            <p><a href = "{% url 'nuevo_capitulo' libro=libro.pk %}">Nuevo Capitulo</a></p>
-            <p><form action="{% url 'fin_de_publicacion' pk=libro.pk %}" method="post">{% csrf_token %}<button>Fin de publicación</button></form></p>
-        {% endif %}
-        <p><a href="{% url 'eliminar_el_libro' pk=libro.pk %}">Eliminar libro</a></p>
-    {% elif user.is_authenticated and user not in lectores %}
-        <p><form action="{% url 'leyendo' pk=libro.pk %}" method="post">{% csrf_token %}<button>Leyendo</button></form></p>
-    {% endif %}
-    <ol>
-        {% for capitulo in capitulos %}
-            <li><a href="{% url 'capitulo' pk=capitulo.pk %}">{{ capitulo.titulo }}</a>
-                {% if capitulo.autor == user %}
-                     - <a href="{% url 'editar_el_capitulo' pk=capitulo.pk %}">Editar capitulo</a>
-                     - <a href="{% url 'eliminar_el_capitulo' pk=capitulo.pk %}">Eliminar capitulo</a>
-                {% elif user.is_authenticated and capitulo in capitulos_leidos %}
-                     - Leido
+    <h1><a href="{% url 'pagina_de_inicio' %}">Fabulivum</a></h1>
+    <div class="row">
+        <div class="col-md-4">    
+            <h2>{{ libro.titulo }}</h2>
+            {% if libro.portada %}
+                <p><img src="{{ libro.portada }}" alt="Portada de {{ libro.titulo }}"></p>
+            {% endif %}
+            <h3>Sinopsis</h3>
+            <p>{{ libro.descripcion }}</p>
+            <p><strong>Inicio de publicación:</strong> {{ libro.inicio_publicacion }}</p>
+            {% if libro.fin_publicacion is not empty %}
+                <p><strong>Fin de publicación:</strong> {{ libro.fin_publicacion }}</p>
+            {% endif %}
+            {% if libro.autor == user %}
+                <p>{{ libro.lectores.count }} lectores</p>
+                <p><a href = "{% url 'editar_el_libro' pk=libro.pk %}">Editar libro</a></p>
+                {% if libro.fin_publicacion is empty %}
+                    <p><a href = "{% url 'nuevo_capitulo' libro=libro.pk %}">Nuevo Capitulo</a></p>
+                    <p><form action="{% url 'fin_de_publicacion' pk=libro.pk %}" method="post">{% csrf_token %}
+                        <button>Fin de publicación</button>
+                    </form></p>
                 {% endif %}
-            </li>
-        {% endfor %}
-    </ol>
+                <p><a href="{% url 'eliminar_el_libro' pk=libro.pk %}">Eliminar libro</a></p>
+            {% elif user.is_authenticated  %}
+                {% if user not in lectores %}
+                    <p><form action="{% url 'leyendo' pk=libro.pk %}" method="post">{% csrf_token %}
+                        <button>Leyendo</button>
+                    </form></p>
+                {% else %}
+                    <p>Estás leyendo este libro</p>
+                {% endif %}
+            {% endif %}
+            <p><a href="{% url 'lista_de_libros' %}">Lista de libros</a></p>
+            {% if not libro.autor is user %}
+                <p><a href="{% url 'usuario' pk=libro.autor.pk %}">Perfil del autor</a></p>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <h3>Capitulos</h3>
+            <ol class="list-group list-group-numbered">
+                {% for capitulo in capitulos %}
+                    <li class="list-group-item"><a href="{% url 'capitulo' pk=capitulo.pk numero=capitulo.numero %}">{{ capitulo.titulo }}</a>
+                        {% if capitulo.autor is user %}
+                            - <a href="{% url 'editar_el_capitulo' pk=capitulo.pk %}">Editar capitulo</a>
+                            - <a href="{% url 'eliminar_el_capitulo' pk=capitulo.pk %}">Eliminar capitulo</a>
+                        {% elif user.is_authenticated and capitulo in capitulos_leidos %}
+                            - Leido
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
 {% endblock %}

@@ -104,7 +104,8 @@ class lista_autores(ListView):
     template_name = "libro/listaAutores.html"
     
     def get_queryset(self):
-        return Usuario.objects.filter().order_by('username') ##TODO: Filtrar por usuarios con libros
+        busqueda = self.request.GET.get("nombre", default="")
+        return Usuario.objects.filter(autor_libro__gt=0, username__icontains=busqueda).order_by('username')
     
 class detalles_usuario(DetailView):
     model = Usuario
@@ -121,7 +122,8 @@ class leer_capitulo(DetailView):
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
-        contexto["secuela_de"] = Capitulo.objects.filter(secuela_de=self.kwargs['pk']).order_by('fecha_publicacion')
+        contexto["precuelas"] = Capitulo.objects.filter(secuela_de=self.kwargs['pk'], numero__lt=self.kwargs['numero']).order_by('fecha_publicacion')
+        contexto["secuelas"] = Capitulo.objects.filter(secuela_de=self.kwargs['pk'], numero__gt=self.kwargs['numero']).order_by('fecha_publicacion')
         contexto["lectores"] = Usuario.objects.filter(lectores_capitulo=self.kwargs['pk'])
         return contexto
     
@@ -129,7 +131,8 @@ def finalizar_lectura(request, pk, aux):
     lector = Usuario.objects.get(id=request.user.id)
     capitulo = Capitulo.objects.get(pk=pk)
     capitulo.lectores.add(lector)
-    if aux == 0:
-        return HttpResponseRedirect(reverse('libro', kwargs={'pk':capitulo.libro.pk}))
+    if aux > 0:
+        secuela = Capitulo.objects.get(pk=aux)
+        return HttpResponseRedirect(reverse('capitulo', kwargs={'pk':aux, 'numero':secuela.numero}))
     else:
-        return HttpResponseRedirect(reverse('capitulo', kwargs={'pk':aux}))
+        return HttpResponseRedirect(reverse('libro', kwargs={'pk':capitulo.libro.pk}))

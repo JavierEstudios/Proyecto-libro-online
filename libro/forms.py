@@ -9,7 +9,7 @@ class LibroForm(forms.ModelForm):
 class CapituloForm(forms.ModelForm):
     class Meta:
         model = Capitulo
-        fields = ['titulo','numero','texto_principal','secuela_de']
+        fields = ['titulo','numero','texto_principal','secuela_de'] #TODO Controlar que secuela de no reciba capitulos de otro libro
         
 class NuevoUsuarioForm(forms.ModelForm):
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
