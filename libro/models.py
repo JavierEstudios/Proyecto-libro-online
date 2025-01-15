@@ -38,5 +38,5 @@ class Capitulo(models.Model):
         return f"{self.titulo} - {self.libro.titulo}"
     
     def get_absolute_url(self):
-        return reverse("capitulo", kwargs={'pk':self.pk})
+        return reverse("capitulo", kwargs={'pk':self.pk, 'numero':self.numero})
     
