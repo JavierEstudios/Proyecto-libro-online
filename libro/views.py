@@ -74,10 +74,23 @@ class crear_capitulo(LoginRequiredMixin,CreateView):
         form.instance.libro = get_object_or_404(Libro, pk=self.kwargs['libro'])
         return super().form_valid(form)
     
+    #Propuesta de Jose Ignacio para filtrar los capitulos por el libro al que pertenecen
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['libro'] = self.kwargs['libro']
+        return kwargs
+    
 class editar_capitulo(LoginRequiredMixin,UpdateView):
     model = Capitulo
     form_class = CapituloForm
     template_name = "libro/editarCapitulo.html"
+
+    #Propuesta de Jose Ignacio para filtrar los capitulos por el libro al que pertenecen, modificada para encajar en esta vista
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['pk'] = self.object.pk
+        kwargs['libro'] = self.object.libro.pk
+        return kwargs
 
 class eliminar_capitulo(LoginRequiredMixin,DeleteView):
     model = Capitulo
@@ -123,7 +136,7 @@ class leer_capitulo(DetailView):
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
-        aux = Capitulo.objects.filter(secuela_de=self.kwargs['pk']).order_by('fecha_publicacion')
+        aux = Capitulo.objects.filter(conexiones=self.kwargs['pk']).order_by('fecha_publicacion')
         contexto["precuelas"] = aux.filter(numero__lt=self.kwargs['numero'])
         contexto["secuelas"] = aux.filter(numero__gt=self.kwargs['numero'])
         contexto["lectores"] = Usuario.objects.filter(lectores_capitulo=self.kwargs['pk'])

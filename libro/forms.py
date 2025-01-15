@@ -9,8 +9,15 @@ class LibroForm(forms.ModelForm):
 class CapituloForm(forms.ModelForm):
     class Meta:
         model = Capitulo
-        fields = ['titulo','numero','texto_principal','secuela_de'] #TODO Controlar que secuela de no reciba capitulos de otro libro
-        
+        fields = ['titulo','numero','texto_principal','conexiones']
+
+    #Propuesta de Jose Ignacio para filtrar los capitulos por el libro al que pertenecen, con algunas modificaciones
+    def __init__(self, *args, **kwargs):
+        pk = kwargs.pop('pk', None)
+        libro = kwargs.pop('libro', None)
+        super().__init__(*args, **kwargs)
+        self.fields['conexiones'].queryset = Capitulo.objects.filter(libro__pk=libro).exclude(pk=pk).distinct()
+
 class NuevoUsuarioForm(forms.ModelForm):
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
     class Meta:
