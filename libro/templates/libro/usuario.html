@@ -11,7 +11,7 @@
         <div class="col-md-4">
             <h2>{{ usuario.username }}</h2>
             {% if usuario.imagen_perfil %}
-                <p><img src="{{ usuario.imagen_perfil }}" alt="Fotografía de {{ usuario.username }}"></p>
+                <p><img style="height: 20em;" img src="{{ usuario.imagen_perfil.url }}" alt="Fotografía de {{ usuario.username }}"></p>
             {% endif %}
             <h3>Sobre mí</h3>
             <p>{{ usuario.sobre_mi }}</p>
