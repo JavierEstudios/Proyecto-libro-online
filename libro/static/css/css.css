@@ -1,0 +1,46 @@
+body {
+    background-color: floralwhite;
+    padding: 0em 2em;
+}
+#base {
+    background-color: ivory;
+}
+h1, h2, h3 {
+    color: navy;
+}
+label {
+    font-weight: bold;
+}
+label.barra-de-busqueda {
+    padding: 0.2em 0em;
+}
+input {
+    background-color: azure;
+}
+input, button {
+    border-radius: 0.4em;
+}
+.formularios input {
+    width: 100%;
+    padding: 0.5em;
+    margin: 0.2em 0em;
+}
+.boton-enlace {
+    background-color:inherit;
+    border: none;
+}
+.boton-enlace, a {
+    color: darkslateblue;
+}
+a {
+    text-decoration: none;
+}
+.list-group{
+    margin: 0.5em 0em;
+}
+.list-group-item {
+    background-color: whitesmoke;
+}
+.item-lista-libros {
+    margin: 0em 0.2em;
+}

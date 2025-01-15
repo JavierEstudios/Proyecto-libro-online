@@ -17,7 +17,7 @@
             <p><a href="{% url 'capitulo' pk=secuela.pk numero=secuela.numero %}">{{ secuela.titulo }}</a></p>
         {% else %}
             <p><form action="{% url 'capitulo_leido' pk=capitulo.pk aux=secuela.pk %}" method="post">
-                {% csrf_token %}<button>{{ secuela.titulo }}</button>
+                {% csrf_token %}<button class="boton-enlace">{{ secuela.titulo }}</button>
             </form></p>
         {% endif %}
     {% empty %}
@@ -25,7 +25,7 @@
             <p><a href="{% url 'libro' pk=capitulo.libro.pk %}">Capitulo terminado</a></p>
         {% else %}
             <p><form action="{% url 'capitulo_leido' pk=capitulo.pk aux=0 %}" method="post">
-                {% csrf_token %}<button>Capitulo terminado</button>
+                {% csrf_token %}<button class="boton-enlace">Capitulo terminado</button>
             </form></p>
         {% endif %}
     {% endfor %}

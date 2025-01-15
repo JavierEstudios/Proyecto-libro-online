@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-(dl$=dde7uov2*+@-(d(fxio$^f8v8@j^y%q=7p3^7xgii)98i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','TFGLibrosJavier.eu.pythonanywhere.com']
 
 AUTH_USER_MODEL = "libro.Usuario"
 

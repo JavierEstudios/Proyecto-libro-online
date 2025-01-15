@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
@@ -113,7 +113,8 @@ class detalles_usuario(DetailView):
     
     def get_context_data(self, **kwargs):
         libros = super().get_context_data(**kwargs)
-        libros["libros"] = Libro.objects.filter(autor=self.kwargs['pk']).order_by('inicio_publicacion')
+        libros["libros_autor"] = Libro.objects.filter(autor=self.kwargs['pk']).order_by('inicio_publicacion')
+        libros["libros_lector"] = Libro.objects.filter(lectores=self.kwargs['pk']).order_by('inicio_publicacion')
         return libros
     
 class leer_capitulo(DetailView):

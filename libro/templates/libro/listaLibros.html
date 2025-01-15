@@ -9,41 +9,39 @@
     <h1><a href="{% url 'pagina_de_inicio' %}">Fabulivum</a></h1>
     <h2>Lista de libros</h2>
     <form action="{% url 'lista_de_libros' %}" method="get">
-        <label for="titulo">Buscar por titulo</label>
+        <label for="titulo" class="barra-de-busqueda">Buscar por titulo:</label>
         <input type="text" id="titulo" name="titulo" placeholder="Titulo">
         <button>Buscar</button>
     </form>
-    {% for libro in object_list %}
-        <div class="row">
-            <div class="col-md-2">
-                <a href="{% url 'libro' pk=libro.pk %}">
-                    {% if libro.portada %}
-                        <img src="{{ libro.portada }}" alt="Portada de {{ libro.titulo }}">
-                    {% else %}
-                        Libro sin portada
-                    {% endif %}
-                    <br/>Ver detalles
-                </a>
-            </div>
-            <div class="col-md-10">
+    <ul class="list-group">
+        {% for libro in object_list %}
+            <li class="list-group-item">
                 <div class="row">
-                    <div class="col"><strong>Titulo:</strong> {{ libro.titulo }}</div>
-                </div>
-                <div class="row">
-                    <div class="col"><strong>Autor:</strong> {{ libro.autor.username }}</div>
-                </div>
-                <div class="row">
-                    <div class="col"><strong>Estado:</strong> 
-                        {% if libro.fin_publicacion is empty %}
-                            En publicación
-                        {% else %}
-                            Finalizado
-                        {% endif %}
+                    <div class="col-3">
+                        <a href="{% url 'libro' pk=libro.pk %}">
+                            {% if libro.portada %}
+                                <img src="{{ libro.portada }}" alt="Portada de {{ libro.titulo }}">
+                            {% else %}
+                                Libro sin portada
+                            {% endif %}
+                            <br/>Ver detalles
+                        </a>
+                    </div>
+                    <div class="col-9">
+                        <div class="float-md-start item-lista-libros"><strong>Titulo:</strong> {{ libro.titulo }}</div>
+                        <div class="float-md-start item-lista-libros"><strong>Autor:</strong> {{ libro.autor.username }}</div>
+                        <div class="float-md-start item-lista-libros"><strong>Estado:</strong> 
+                            {% if libro.fin_publicacion is empty %}
+                                En publicación
+                            {% else %}
+                                Finalizado
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    {% empty %}
-        <div class="row"><div class="col">No se han encontrado libros</div></div>
-    {% endfor %}
+            </li>
+        {% empty %}
+            <li class="list-group-item">No se han encontrado libros</li>
+        {% endfor %}
+    </ul>
 {% endblock %}

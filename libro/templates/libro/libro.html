@@ -20,7 +20,7 @@
                 <p><strong>Fin de publicación:</strong> {{ libro.fin_publicacion }}</p>
             {% endif %}
             {% if libro.autor == user %}
-                <p>{{ libro.lectores.count }} lectores</p>
+                <p>{{ libro.lectores.count }} lector{% if libro.lectores.count != 1 %}es{% endif %}</p>
                 <p><a href = "{% url 'editar_el_libro' pk=libro.pk %}">Editar libro</a></p>
                 {% if libro.fin_publicacion is empty %}
                     <p><a href = "{% url 'nuevo_capitulo' libro=libro.pk %}">Nuevo Capitulo</a></p>
@@ -32,14 +32,14 @@
             {% elif user.is_authenticated  %}
                 {% if user not in lectores %}
                     <p><form action="{% url 'leyendo' pk=libro.pk %}" method="post">{% csrf_token %}
-                        <button>Leyendo</button>
+                        <button class="boton-enlace">Leyendo</button>
                     </form></p>
                 {% else %}
                     <p>Estás leyendo este libro</p>
                 {% endif %}
             {% endif %}
             <p><a href="{% url 'lista_de_libros' %}">Lista de libros</a></p>
-            {% if not libro.autor is user %}
+            {% if not libro.autor == user %}
                 <p><a href="{% url 'usuario' pk=libro.autor.pk %}">Perfil del autor</a></p>
             {% endif %}
         </div>
@@ -48,7 +48,7 @@
             <ol class="list-group list-group-numbered">
                 {% for capitulo in capitulos %}
                     <li class="list-group-item"><a href="{% url 'capitulo' pk=capitulo.pk numero=capitulo.numero %}">{{ capitulo.titulo }}</a>
-                        {% if capitulo.autor is user %}
+                        {% if capitulo.autor == user %}
                             - <a href="{% url 'editar_el_capitulo' pk=capitulo.pk %}">Editar capitulo</a>
                             - <a href="{% url 'eliminar_el_capitulo' pk=capitulo.pk %}">Eliminar capitulo</a>
                         {% elif user.is_authenticated and capitulo in capitulos_leidos %}
