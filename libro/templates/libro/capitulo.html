@@ -13,7 +13,7 @@
     {% endfor %}
     <p>{{ capitulo.texto_principal|linebreaks }}</p>
     {% for secuela in secuelas %}
-        {% if user in lectores or user is capitulo.autor or not user.is_authenticated  %}
+        {% if user in lectores or user == capitulo.autor or not user.is_authenticated  %}
             <p><a href="{% url 'capitulo' pk=secuela.pk numero=secuela.numero %}">{{ secuela.titulo }}</a></p>
         {% else %}
             <p><form action="{% url 'capitulo_leido' pk=capitulo.pk aux=secuela.pk %}" method="post">
@@ -21,7 +21,7 @@
             </form></p>
         {% endif %}
     {% empty %}
-        {% if user in lectores or user is capitulo.autor or not user.is_authenticated %}
+        {% if user in lectores or user == capitulo.autor or not user.is_authenticated %}
             <p><a href="{% url 'libro' pk=capitulo.libro.pk %}">Capitulo terminado</a></p>
         {% else %}
             <p><form action="{% url 'capitulo_leido' pk=capitulo.pk aux=0 %}" method="post">
