@@ -15,13 +15,13 @@ label {
 label.barra-de-busqueda {
     padding: 0.2em 0em;
 }
-input {
+input, textarea, select {
     background-color: azure;
 }
-input, button {
+input, button, textarea, select {
     border-radius: 0.4em;
 }
-.formularios input {
+.formularios input, .formularios textarea, .formularios select {
     width: 100%;
     padding: 0.5em;
     margin: 0.2em 0em;
