@@ -9,6 +9,15 @@ body {
 h1, h2, h3 {
     color: navy;
 }
+h1.texto-pagina-inicio {
+    font-size: 3em;
+}
+.texto-pagina-inicio, .menu-autor-libro {
+    text-align: center;
+}
+p.texto-pagina-inicio {
+    font-size: 2em;
+}
 label {
     font-weight: bold;
 }
@@ -50,4 +59,8 @@ a {
 }
 .item-lista-libros {
     margin: 0em 0.2em;
+}
+.imagenes {
+    max-height: 20em;
+    max-width: 100%;
 }

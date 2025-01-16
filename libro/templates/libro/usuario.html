@@ -11,14 +11,14 @@
         <div class="col-md-4">
             <h2>{{ usuario.username }}</h2>
             {% if usuario.imagen_perfil %}
-                <p><img style="height: 20em;" img src="{{ usuario.imagen_perfil.url }}" alt="Fotografía de {{ usuario.username }}"></p>
+                <p><img class="imagenes" src="{{ usuario.imagen_perfil.url }}" alt="Fotografía de {{ usuario.username }}"></p>
             {% endif %}
             <h3>Sobre mí</h3>
             <p>{{ usuario.sobre_mi }}</p>
             {% if usuario.pk == user.pk %}
-                <p><a href="{% url 'editar_el_usuario' pk=usuario.pk %}">Editar</a></p>
-                <p><a href="{% url 'eliminar_el_usuario' pk=usuario.pk %}">Eliminar</a></p>
-                <p><a href="{% url 'nuevo_libro' %}">Nuevo libro</a></p>
+                <p class="menu-autor-libro"><a href="{% url 'editar_el_usuario' pk=usuario.pk %}">Editar</a></p>
+                <p class="menu-autor-libro"><a href="{% url 'eliminar_el_usuario' pk=usuario.pk %}">Eliminar</a></p>
+                <p class="menu-autor-libro"><a href="{% url 'nuevo_libro' %}">Nuevo libro</a></p>
             {% endif %}
         </div>
         <div class="col-md-8">

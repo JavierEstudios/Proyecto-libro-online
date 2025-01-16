@@ -11,7 +11,7 @@
         <div class="col-md-4">    
             <h2>{{ libro.titulo }}</h2>
             {% if libro.portada %}
-                <p><img style="height: 20em;" src="{{ libro.portada.url }}" alt="Portada de {{ libro.titulo }}"></p>
+                <p><img class="imagenes" src="{{ libro.portada.url }}" alt="Portada de {{ libro.titulo }}"></p>
             {% endif %}
             <h3>Sinopsis</h3>
             <p>{{ libro.descripcion }}</p>
@@ -21,26 +21,26 @@
             {% endif %}
             {% if libro.autor == user %}
                 <p>{{ libro.lectores.count }} lector{% if libro.lectores.count != 1 %}es{% endif %}</p>
-                <p><a href = "{% url 'editar_el_libro' pk=libro.pk %}">Editar libro</a></p>
+                <p class="menu-autor-libro"><a href = "{% url 'editar_el_libro' pk=libro.pk %}">Editar libro</a></p>
                 {% if libro.fin_publicacion is empty %}
-                    <p><a href = "{% url 'nuevo_capitulo' libro=libro.pk %}">Nuevo Capitulo</a></p>
-                    <p><form action="{% url 'fin_de_publicacion' pk=libro.pk %}" method="post">{% csrf_token %}
+                    <p class="menu-autor-libro"><a href = "{% url 'nuevo_capitulo' libro=libro.pk %}">Nuevo Capitulo</a></p>
+                    <p><form action="{% url 'fin_de_publicacion' pk=libro.pk %}" method="post" class="menu-autor-libro">{% csrf_token %}
                         <button class="boton-enlace">Fin de publicación</button>
                     </form></p>
                 {% endif %}
-                <p><a href="{% url 'eliminar_el_libro' pk=libro.pk %}">Eliminar libro</a></p>
+                <p class="menu-autor-libro"><a href="{% url 'eliminar_el_libro' pk=libro.pk %}">Eliminar libro</a></p>
             {% elif user.is_authenticated  %}
                 {% if user not in lectores %}
-                    <p><form action="{% url 'leyendo' pk=libro.pk %}" method="post">{% csrf_token %}
+                    <p><form action="{% url 'leyendo' pk=libro.pk %}" method="post" class="menu-autor-libro">{% csrf_token %}
                         <button class="boton-enlace">Leyendo</button>
                     </form></p>
                 {% else %}
-                    <p>Estás leyendo este libro</p>
+                    <p class="menu-autor-libro">Estás leyendo este libro</p>
                 {% endif %}
             {% endif %}
-            <p><a href="{% url 'lista_de_libros' %}">Lista de libros</a></p>
+            <p class="menu-autor-libro"><a href="{% url 'lista_de_libros' %}">Lista de libros</a></p>
             {% if not libro.autor == user %}
-                <p><a href="{% url 'usuario' pk=libro.autor.pk %}">Perfil del autor</a></p>
+                <p class="menu-autor-libro"><a href="{% url 'usuario' pk=libro.autor.pk %}">Perfil del autor</a></p>
             {% endif %}
         </div>
         <div class="col-md-8">
