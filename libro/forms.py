@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.password_validation import validate_password
 from .models import Usuario, Libro, Capitulo
 
 class LibroForm(forms.ModelForm):
@@ -24,13 +25,13 @@ class NuevoUsuarioForm(forms.ModelForm):
         model = Usuario
         fields = ['username', 'password', 'email', 'imagen_perfil', 'sobre_mi']
     
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])
-        if commit:
-            user.save()
-
-        return user
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        try:
+            validate_password(password, user=None, password_validators=None)
+        except forms.ValidationError as e:
+            self.add_error('password', e)
+        return password
         
 class EditarUsuarioForm(forms.ModelForm):
     class Meta:
