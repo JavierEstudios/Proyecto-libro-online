@@ -21,17 +21,31 @@ class CapituloForm(forms.ModelForm):
 
 class NuevoUsuarioForm(forms.ModelForm):
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Password2', widget=forms.PasswordInput)
+    
     class Meta:
         model = Usuario
-        fields = ['username', 'password', 'email', 'imagen_perfil', 'sobre_mi']
+        fields = ['username', 'password', 'password2', 'email', 'imagen_perfil', 'sobre_mi']
     
     def clean_password(self):
         password = self.cleaned_data['password']
-        try:
-            validate_password(password, user=None, password_validators=None)
-        except forms.ValidationError as e:
-            self.add_error('password', e)
-        return password
+        password2 = self.cleaned_data['password2']
+        if password != password2:
+            raise forms.ValidationError('Las contraseñas no coinciden')
+        else:
+            try:
+                validate_password(password, user=None, password_validators=None)
+            except forms.ValidationError as e:
+                self.add_error('password', e)
+            return password
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        if commit:
+            user.save()
+
+        return user
         
 class EditarUsuarioForm(forms.ModelForm):
     class Meta:
