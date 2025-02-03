@@ -6,13 +6,48 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Fabulivum</h1>
+    <h1><a href="{% url 'pagina_de_inicio' %}">Fabulivum</a></h1>
     <h2>Lista de libros</h2>
-    <ul>
+    <form action="{% url 'lista_de_libros' %}" method="get">
+        <label for="titulo" class="barra-de-busqueda">Buscar por titulo:</label>
+        <input type="text" id="titulo" name="titulo" placeholder="Titulo">
+        <button>Buscar</button>
+    </form>
+    <ul class="list-group">
         {% for libro in object_list %}
-            <li><a href="{% url 'libro' pk=libro.pk %}">{{ libro.titulo }}</a> - {{ libro.autor.username }}</li>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-3 col-lg-2">
+                            {% if libro.portada %}
+                                <img style="height: 10em;" src="{{ libro.portada.url }}" alt="Portada de {{ libro.titulo }}">
+                            {% else %}
+                                Libro sin portada
+                            {% endif %}
+                            <br/>
+                    </div>
+                    <div class="col-md-9 col-lg-10">
+                        <div class="{% if not libro.portada %}float-md-start {% endif %}item-lista-libros">
+                            <strong>Titulo:</strong> {{ libro.titulo }}
+                        </div>
+                        <div class="{% if not libro.portada %}float-md-start {% endif %}item-lista-libros">
+                            <strong>Autor:</strong> {{ libro.autor.username }}
+                        </div>
+                        <div class="{% if not libro.portada %}float-md-start {% endif %}item-lista-libros">
+                            <strong>Estado:</strong> 
+                            {% if libro.fin_publicacion is empty %}
+                                En publicación
+                            {% else %}
+                                Finalizado
+                            {% endif %}
+                        </div>
+                        <div class="{% if not libro.portada %}float-md-start {% endif %}item-lista-libros">
+                            <a href="{% url 'libro' pk=libro.pk %}">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
         {% empty %}
-            <li>No hay libros</li>
+            <li class="list-group-item">No se han encontrado libros</li>
         {% endfor %}
     </ul>
 {% endblock %}

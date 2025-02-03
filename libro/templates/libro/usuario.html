@@ -6,20 +6,44 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Fabulivum</h1>
-    <h2>{{ usuario.username }}</h2>
-    <p>Sobre mí</p>
-    <p>{{ usuario.sobre_mi }}</p>
-    {% if usuario.pk == user.pk %}
-        <p>
-            <a href="{% url 'editar_el_usuario' pk=usuario.pk %}">Editar</a>
-            <a href="{% url 'eliminar_el_usuario' pk=usuario.pk %}">Eliminar</a>
-        </p>
-    {% endif %}
-    <ul>
-        {% for libro in libros %}
-            <li><a href="{% url 'libro' pk=libro.pk %}">{{ libro.titulo }}</a></li>
-        {% endfor %}
-    </ul>
-    <p><a href="{% url 'pagina_de_inicio' %}">Pagina de inicio</a></p>
+    <h1><a href="{% url 'pagina_de_inicio' %}">Fabulivum</a></h1>
+    <div class="row">
+        <div class="col-md-4">
+            <h2>{{ usuario.username }}</h2>
+            {% if usuario.imagen_perfil %}
+                <p><img class="imagenes" src="{{ usuario.imagen_perfil.url }}" alt="Fotografía de {{ usuario.username }}"></p>
+            {% endif %}
+            <h3>Sobre mí</h3>
+            <p>{{ usuario.sobre_mi }}</p>
+            {% if usuario.pk == user.pk %}
+                <p class="menu-autor-libro"><a href="{% url 'editar_el_usuario' pk=usuario.pk %}">Editar</a></p>
+                <p class="menu-autor-libro"><a href="{% url 'eliminar_el_usuario' pk=usuario.pk %}">Eliminar</a></p>
+                <p class="menu-autor-libro"><a href="{% url 'nuevo_libro' %}">Nuevo libro</a></p>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            {% if usuario.pk == user.pk %}
+                <h3>Tus libros</h3>
+            {% else %}
+                <h3>Libros del autor</h3>
+            {% endif %}
+            <div class="list-group">
+                {% for libro in libros_autor %}
+                    <a href="{% url 'libro' pk=libro.pk %}" class="list-group-item list-group-item-action">{{ libro.titulo }}</a>
+                {% empty %}
+                    <a href="#" class="list-group-item disabled">No hay libros</a>
+                {% endfor %}
+            </div>
+            {% if usuario.pk == user.pk %}
+                <h3>Libros que estás leyendo</h3>
+                <div class="list-group">
+                    {% for libro in libros_lector %}
+                        <a href="{% url 'libro' pk=libro.pk %}" class="list-group-item list-group-item-action">{{ libro.titulo }}</a>
+                    {% empty %}
+                        <a href="#" class="list-group-item disabled">No estás leyendo ningun libro</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

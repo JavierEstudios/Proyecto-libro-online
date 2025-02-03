@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
@@ -18,17 +18,25 @@ class lista_libros(ListView):
     template_name = "libro/listaLibros.html"
     
     def get_queryset(self):
-        query = self.request.GET.get("q")
-        return Libro.objects.filter().order_by('inicio_publicacion')
+        busqueda = self.request.GET.get("titulo", default="")
+        return Libro.objects.filter(titulo__icontains=busqueda).order_by('inicio_publicacion')
     
 class detalles_libro(DetailView):
     model = Libro
     template_name = "libro/libro.html"
     
     def get_context_data(self, **kwargs):
-        capitulos = super().get_context_data(**kwargs)
-        capitulos["capitulos"] = Capitulo.objects.filter(libro=self.kwargs['pk']).order_by('numero')
-        return capitulos
+        contexto = super().get_context_data(**kwargs)
+        contexto["capitulos"] = Capitulo.objects.filter(libro=self.kwargs['pk']).order_by('numero')
+        contexto["capitulos_leidos"] = Capitulo.objects.filter(libro=self.kwargs['pk'], lectores=self.request.user.id)
+        contexto["lectores"] = Usuario.objects.filter(lectores_libro=self.kwargs['pk'])
+        return contexto
+    
+def leyendo_libro(request, pk):
+    lector = Usuario.objects.get(id=request.user.id)
+    libro = Libro.objects.get(pk=pk)
+    libro.lectores.add(lector)
+    return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk}))
     
 class crear_libro(LoginRequiredMixin,CreateView):
     model = Libro
@@ -66,10 +74,23 @@ class crear_capitulo(LoginRequiredMixin,CreateView):
         form.instance.libro = get_object_or_404(Libro, pk=self.kwargs['libro'])
         return super().form_valid(form)
     
+    #Propuesta de Jose Ignacio para filtrar los capitulos por el libro al que pertenecen
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['libro'] = self.kwargs['libro']
+        return kwargs
+    
 class editar_capitulo(LoginRequiredMixin,UpdateView):
     model = Capitulo
     form_class = CapituloForm
     template_name = "libro/editarCapitulo.html"
+
+    #Propuesta de Jose Ignacio para filtrar los capitulos por el libro al que pertenecen, modificada para encajar en esta vista
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['pk'] = self.object.pk
+        kwargs['libro'] = self.object.libro.pk
+        return kwargs
 
 class eliminar_capitulo(LoginRequiredMixin,DeleteView):
     model = Capitulo
@@ -96,7 +117,8 @@ class lista_autores(ListView):
     template_name = "libro/listaAutores.html"
     
     def get_queryset(self):
-        return Usuario.objects.filter().order_by('username') ##TODO: Filtrar por usuarios con libros
+        busqueda = self.request.GET.get("nombre", default="")
+        return Usuario.objects.filter(username__icontains=busqueda).exclude(autor_libro__isnull=True).order_by('username')
     
 class detalles_usuario(DetailView):
     model = Usuario
@@ -104,7 +126,8 @@ class detalles_usuario(DetailView):
     
     def get_context_data(self, **kwargs):
         libros = super().get_context_data(**kwargs)
-        libros["libros"] = Libro.objects.filter(autor=self.kwargs['pk']).order_by('inicio_publicacion')
+        libros["libros_autor"] = Libro.objects.filter(autor=self.kwargs['pk']).order_by('inicio_publicacion')
+        libros["libros_lector"] = Libro.objects.filter(lectores=self.kwargs['pk']).order_by('inicio_publicacion')
         return libros
     
 class leer_capitulo(DetailView):
@@ -112,6 +135,19 @@ class leer_capitulo(DetailView):
     template_name = "libro/capitulo.html"
 
     def get_context_data(self, **kwargs):
-        capitulos = super().get_context_data(**kwargs)
-        capitulos["secuela_de"] = Capitulo.objects.filter(secuela_de=self.kwargs['pk']).order_by('fecha_publicacion')
-        return capitulos
+        contexto = super().get_context_data(**kwargs)
+        aux = Capitulo.objects.filter(conexiones=self.kwargs['pk']).order_by('fecha_publicacion')
+        contexto["precuelas"] = aux.filter(numero__lt=self.kwargs['numero'])
+        contexto["secuelas"] = aux.filter(numero__gt=self.kwargs['numero'])
+        contexto["lectores"] = Usuario.objects.filter(lectores_capitulo=self.kwargs['pk'])
+        return contexto
+    
+def finalizar_lectura(request, pk, aux):
+    lector = Usuario.objects.get(id=request.user.id)
+    capitulo = Capitulo.objects.get(pk=pk)
+    capitulo.lectores.add(lector)
+    if aux > 0:
+        secuela = Capitulo.objects.get(pk=aux)
+        return HttpResponseRedirect(reverse('capitulo', kwargs={'pk':aux, 'numero':secuela.numero}))
+    else:
+        return HttpResponseRedirect(reverse('libro', kwargs={'pk':capitulo.libro.pk}))

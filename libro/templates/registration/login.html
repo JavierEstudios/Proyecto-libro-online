@@ -6,7 +6,7 @@
 
 {% block content %}
     <h1>Log In</h1>
-    <form method="POST">{% csrf_token %}
+    <form method="POST" class="login-style">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Log In</button>
     </form>
