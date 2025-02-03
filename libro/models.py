@@ -12,8 +12,30 @@ class Usuario(AbstractUser):
         return reverse("usuario", kwargs={'pk':self.pk})
 
 class Libro(models.Model):
+    CHOICES_GENERO = {"NAR": "Narrativa",
+                        "FAN": "Fantasía",
+                        "ROM": "Romance",
+                        "TRO": "Terror",
+                        "SCI": "Ciencia Ficción",
+                        "MIS": "Misterio",
+                        "AUC": "Autobiografía",
+                        "BIO": "Biografía",
+                        "ENS": "Ensayo",
+                        "POE": "Poesía",
+                        "HIS": "Histórico",
+                        "POL": "Político",
+                        "REL": "Religioso",
+                        "CUL": "Cultura",
+                        "ART": "Arte",
+                        "CIE": "Ciencia",
+                        "DEP": "Deportes",
+                        "COC": "Cocina",
+                        "VIA": "Viajes",
+                        "HUM": "Humor",
+                        "OTR": "Otros"}
     titulo = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=2000)
+    genero = models.CharField(choices=CHOICES_GENERO, max_length=3)
     portada = models.ImageField(blank=True, upload_to="portadas_libros/")
     inicio_publicacion = models.DateField(auto_now_add=True)
     fin_publicacion = models.DateField(null=True, blank=True)
