@@ -7,20 +7,54 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
-from libro.models import Usuario, Libro, Capitulo
-from libro.forms import LibroForm, CapituloForm, NuevoUsuarioForm, EditarUsuarioForm
+from libro.models import *
+from libro.forms import *
 
 class pagina_principal(TemplateView):
     template_name = "libro/main.html"
 
-class lista_libros(ListView):
+## Listas
+class lista_libros_lector(ListView):
+    model = Libro
+    template_name = "libro/listaLibrosLector.html"
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(lectores=self.kwargs['pk']).order_by('inicio_publicacion')
+        return queryset
+
+class buscar_libros(ListView):
     model = Libro
     template_name = "libro/listaLibros.html"
     
     def get_queryset(self):
-        busqueda = self.request.GET.get("titulo", default="")
-        return Libro.objects.filter(titulo__icontains=busqueda).order_by('inicio_publicacion')
+        queryset = super().get_queryset()
+        titulo = self.request.GET.get("titulo")
+        autor = self.request.GET.get("autor")
+        genero = self.request.GET.get("genero")
+        
+        if titulo:
+            queryset = queryset.filter(titulo__icontains=titulo).order_by('inicio_publicacion')
+        if autor:
+            queryset = queryset.filter(autor_libro__username__icontains=autor).order_by('inicio_publicacion')
+        if genero:
+            queryset = queryset.filter(genero=genero).order_by('inicio_publicacion')
+        return queryset
     
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        contexto["autores"] = Usuario.objects.exclude(autor_libro__isnull=True).order_by('username')
+        return contexto
+    
+class lista_autores(ListView):
+    model = Usuario
+    template_name = "libro/listaAutores.html"
+    
+    def get_queryset(self):
+        busqueda = self.request.GET.get("nombre", default="")
+        return Usuario.objects.filter(username__icontains=busqueda).exclude(autor_libro__isnull=True).order_by('username')
+    
+## Libros
 class detalles_libro(DetailView):
     model = Libro
     template_name = "libro/libro.html"
@@ -64,6 +98,7 @@ class eliminar_libro(LoginRequiredMixin,DeleteView):
     template_name = "libro/eliminarLibro.html"
     success_url = reverse_lazy("pagina_de_inicio")
 
+## Capitulos
 class crear_capitulo(LoginRequiredMixin,CreateView):
     model = Capitulo
     form_class = CapituloForm
@@ -97,39 +132,6 @@ class eliminar_capitulo(LoginRequiredMixin,DeleteView):
     template_name = "libro/eliminarCapitulo.html"
     success_url = reverse_lazy("pagina_de_inicio")
     
-class crear_usuario(CreateView):
-    model = Usuario
-    form_class = NuevoUsuarioForm
-    template_name = "registration/nuevoUsuario.html"
-    
-class editar_usuario(LoginRequiredMixin,UpdateView):
-    model = Usuario
-    form_class = EditarUsuarioForm
-    template_name = "registration/editarUsuario.html"
-    
-class eliminar_usuario(LoginRequiredMixin,DeleteView):
-    model = Usuario
-    template_name = "registration/eliminarUsuario.html"
-    success_url = reverse_lazy("pagina_de_inicio")
-    
-class lista_autores(ListView):
-    model = Usuario
-    template_name = "libro/listaAutores.html"
-    
-    def get_queryset(self):
-        busqueda = self.request.GET.get("nombre", default="")
-        return Usuario.objects.filter(username__icontains=busqueda).exclude(autor_libro__isnull=True).order_by('username')
-    
-class detalles_usuario(DetailView):
-    model = Usuario
-    template_name = "libro/usuario.html"
-    
-    def get_context_data(self, **kwargs):
-        libros = super().get_context_data(**kwargs)
-        libros["libros_autor"] = Libro.objects.filter(autor=self.kwargs['pk']).order_by('inicio_publicacion')
-        libros["libros_lector"] = Libro.objects.filter(lectores=self.kwargs['pk']).order_by('inicio_publicacion')
-        return libros
-    
 class leer_capitulo(DetailView):
     model = Capitulo
     template_name = "libro/capitulo.html"
@@ -151,3 +153,29 @@ def finalizar_lectura(request, pk, aux):
         return HttpResponseRedirect(reverse('capitulo', kwargs={'pk':aux, 'numero':secuela.numero}))
     else:
         return HttpResponseRedirect(reverse('libro', kwargs={'pk':capitulo.libro.pk}))
+
+## Usuarios
+class crear_usuario(CreateView):
+    model = Usuario
+    form_class = NuevoUsuarioForm
+    template_name = "registration/nuevoUsuario.html"
+    
+class editar_usuario(LoginRequiredMixin,UpdateView):
+    model = Usuario
+    form_class = EditarUsuarioForm
+    template_name = "registration/editarUsuario.html"
+    
+class eliminar_usuario(LoginRequiredMixin,DeleteView):
+    model = Usuario
+    template_name = "registration/eliminarUsuario.html"
+    success_url = reverse_lazy("pagina_de_inicio")
+    
+class detalles_usuario(DetailView):
+    model = Usuario
+    template_name = "libro/usuario.html"
+    
+    def get_context_data(self, **kwargs):
+        libros = super().get_context_data(**kwargs)
+        libros["libros_autor"] = Libro.objects.filter(autor=self.kwargs['pk']).order_by('inicio_publicacion')
+        libros["libros_lector"] = Libro.objects.filter(lectores=self.kwargs['pk']).order_by('inicio_publicacion')
+        return libros

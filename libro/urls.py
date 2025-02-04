@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import leyendo_libro, fin_publicacion, finalizar_lectura, pagina_principal, lista_libros, detalles_libro, lista_autores, detalles_usuario, leer_capitulo, crear_libro, editar_libro, eliminar_libro, crear_capitulo, editar_capitulo, eliminar_capitulo, crear_usuario, editar_usuario, eliminar_usuario
+from .views import *
 
 urlpatterns = [
     path("", pagina_principal.as_view(), name="pagina_de_inicio"),
-    path("libros/", lista_libros.as_view(), name="lista_de_libros"),
+    path("libros_lector/", lista_libros_lector.as_view(), name="lista_de_libros_faceta_lector"),
+    path("libros_busqueda/", buscar_libros.as_view(), name="busqueda_de_libros"),
     path("libro/<int:pk>", detalles_libro.as_view(), name="libro"),
     path("autores/", lista_autores.as_view(), name="lista_de_autores"),
     path("usuario/<int:pk>", detalles_usuario.as_view(), name="usuario"),
