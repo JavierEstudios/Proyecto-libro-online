@@ -39,8 +39,8 @@ class Libro(models.Model):
     portada = models.ImageField(blank=True, upload_to="portadas_libros/")
     inicio_publicacion = models.DateField(auto_now_add=True)
     fin_publicacion = models.DateField(null=True, blank=True)
-    autor = models.ForeignKey(Usuario, through="Lector_Libro", on_delete=models.CASCADE, related_name="autor_libro")
-    lectores = models.ManyToManyField(Usuario, related_name="lectores_libro", blank=True)
+    autor = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="autor_libro")
+    lectores = models.ManyToManyField(Usuario, through="Lector_Libro", related_name="lectores_libro", blank=True)
     def __str__(self):
         return self.titulo
     
@@ -63,10 +63,10 @@ class Capitulo(models.Model):
         return reverse("capitulo", kwargs={'pk':self.pk, 'numero':self.numero})
     
 class Lector_Libro(models.Model):
-    CHOICES_RELACION = {"TBR": "Pendiente de Lectura",
-                        "RDNG": "En proceso de Lectura",
-                        "FNSH": "Lectura Finalizada"}
-    relacion = models.CharField(choices=CHOICES_RELACION, max_length=4)
+    CHOICES_RELACION = {"P": "Pendiente",
+                        "L": "Leyendo",
+                        "F": "Finalizado"}
+    relacion = models.CharField(choices=CHOICES_RELACION, default="P", max_length=1)
     lector = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
 
