@@ -20,8 +20,17 @@ class lista_libros_lector(ListView):
     
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(lectores=self.kwargs['pk']).order_by('inicio_publicacion')
+        relacion_lector = self.request.GET.get("relacion")
+        queryset = queryset.filter(lectores=self.kwargs['pk'])
+        if relacion_lector:
+            queryset = queryset.filter(lectores_libro__relacion=relacion_lector)
+        queryset.order_by('inicio_publicacion')
         return queryset
+    
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        contexto["opciones"] = Lector_Libro.CHOICES_RELACION
+        return contexto    
 
 class buscar_libros(ListView):
     model = Libro
@@ -32,13 +41,13 @@ class buscar_libros(ListView):
         titulo = self.request.GET.get("titulo")
         autor = self.request.GET.get("autor")
         genero = self.request.GET.get("genero")
-        
         if titulo:
-            queryset = queryset.filter(titulo__icontains=titulo).order_by('inicio_publicacion')
+            queryset = queryset.filter(titulo__icontains=titulo)
         if autor:
-            queryset = queryset.filter(autor_libro__username__icontains=autor).order_by('inicio_publicacion')
+            queryset = queryset.filter(autor_libro__username__icontains=autor)
         if genero:
-            queryset = queryset.filter(genero=genero).order_by('inicio_publicacion')
+            queryset = queryset.filter(genero=genero)
+        queryset.order_by('inicio_publicacion')
         return queryset
     
     def get_context_data(self, **kwargs):
