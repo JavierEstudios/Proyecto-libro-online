@@ -174,6 +174,11 @@ class editar_usuario(LoginRequiredMixin,UpdateView):
     form_class = EditarUsuarioForm
     template_name = "registration/editarUsuario.html"
     
+class editar_contraseña_usuario(LoginRequiredMixin,UpdateView):
+    model = Usuario
+    form_class = EditarContraseñaUsuarioForm
+    template_name = "registration/editarContraseñaUsuario.html"
+    
 class eliminar_usuario(LoginRequiredMixin,DeleteView):
     model = Usuario
     template_name = "registration/eliminarUsuario.html"

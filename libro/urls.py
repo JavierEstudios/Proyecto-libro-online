@@ -21,5 +21,6 @@ urlpatterns = [
     path("capitulo/eliminar/<int:pk>", eliminar_capitulo.as_view(), name="eliminar_el_capitulo"),
     path("usuario/nuevo/", crear_usuario.as_view(), name="nuevo_usuario"),
     path("usuario/editar/<int:pk>", editar_usuario.as_view(), name="editar_el_usuario"),
+    path("usuario/editar_contraseña/<int:pk>", editar_contraseña_usuario.as_view(), name="editar_la_contraseña_del_usuario"),
     path("usuario/eliminar/<int:pk>", eliminar_usuario.as_view(), name="eliminar_el_usuario"),
 ]
