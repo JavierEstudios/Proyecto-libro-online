@@ -39,7 +39,7 @@
                         Libro sin portada
                     {% endif %}
                 </td>
-                <td>{{ libro.titulo }}</td>
+                <td><a href="{% url 'libro' pk=libro.pk %}">{{ libro.titulo }}</a></td>
                 <td>{{ libro.autor.username }}</td>
                 <td>{{ libro.genero }}</td>
                 <td>{{ libro.inicio_publicacion }}</td>
@@ -61,4 +61,5 @@
         {% endfor %}
         </tbody>
     </table>
+    <p><a href="{% url 'busqueda_de_libros' %}">Buscar nuevos libros</a></p>
 {% endblock %}
