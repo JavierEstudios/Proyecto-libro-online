@@ -8,13 +8,12 @@
 {% block content %}
     <h1><a href="{% url 'pagina_de_inicio' %}">Fabulivum</a></h1>
     <h2>Lista de libros</h2>
-    <form action="{% url 'lista_de_libros_faceta_lector' %}" method="get">
-        <label for="relacion" class="barra-de-busqueda">Filtrar por estado:</label>
-        <select name="relacion" id="relacion">
-            <option value="">Todos</option>
-        {% for key, value in opciones %}
-            <option value="{{ key }}">{{ value }}</option>
-        {% endfor %}
+    <form action="{% url 'lista_de_libros_faceta_autor' %}" method="get">
+        <label for="estado" class="barra-de-busqueda">Filtrar por estado:</label>
+        <select name="estado" id="estado">
+            <option value="">Ambos</option>
+            <option value="p">En publicacion</option>
+            <option value="f">Finalizado</option>
         <button>Filtrar</button>
     </form>
     <table class="table">
@@ -26,7 +25,6 @@
                 <th scope="col">Genero</th>
                 <th scope="col">Fecha de publicación</th>
                 <th scope="col">Fecha de finalización</th>
-                <th scope="col">Estado</th>
             </tr>
         </thead>
         <tbody>
@@ -48,18 +46,11 @@
                 {% else %}
                     <td>En publicacion</td>
                 {% endif %}
-                <td>
-                    {% for estado in libro.lectores_libro.all %}
-                        {% if estado.lector == request.user %}
-                            {{ estado.relacion }}
-                        {% endif %}
-                    {% endfor %}
-                </td>
             </tr>
         {% empty %}
-            <tr><td colspan="7">No se han encontrado libros</td></tr>
+            <tr><td colspan="6">No has escrito ningun libro</td></tr>
         {% endfor %}
         </tbody>
     </table>
-    <p><a href="{% url 'busqueda_de_libros' %}">Buscar nuevos libros</a></p>
+    <p><a href="{% url 'nuevo_libro' %}">Añadir nuevo libro</a></p>
 {% endblock %}

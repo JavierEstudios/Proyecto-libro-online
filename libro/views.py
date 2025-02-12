@@ -30,7 +30,21 @@ class lista_libros_lector(ListView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["opciones"] = Lector_Libro.CHOICES_RELACION
-        return contexto    
+        return contexto
+
+class lista_libros_autor(ListView):
+    model = Libro
+    template_name = "libro/listaLibrosAutor.html"
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        estado = self.request.GET.get("estado")
+        if estado == "p":
+            queryset = queryset.filter(fin_publicacion__isnull=True)
+        elif estado == "f":
+            queryset = queryset.exclude(fin_publicacion__isnull=True)
+        queryset.order_by('inicio_publicacion')
+        return queryset
 
 class buscar_libros(ListView):
     model = Libro
@@ -178,8 +192,9 @@ class editar_contraseña_usuario(LoginRequiredMixin,UpdateView):
     model = Usuario
     form_class = EditarContraseñaUsuarioForm
     template_name = "registration/editarContraseñaUsuario.html"
-    
-class eliminar_usuario(LoginRequiredMixin,DeleteView):
+
+# Preguntar la forma de desactivar un usuario
+class desactivar_usuario(LoginRequiredMixin,DeleteView):
     model = Usuario
     template_name = "registration/eliminarUsuario.html"
     success_url = reverse_lazy("pagina_de_inicio")

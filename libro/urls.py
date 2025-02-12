@@ -4,6 +4,7 @@ from .views import *
 urlpatterns = [
     path("", pagina_principal.as_view(), name="pagina_de_inicio"),
     path("libros_lector/", lista_libros_lector.as_view(), name="lista_de_libros_faceta_lector"),
+    path("libros_autor/", lista_libros_autor.as_view(), name="lista_de_libros_faceta_autor"),
     path("libros_busqueda/", buscar_libros.as_view(), name="busqueda_de_libros"),
     path("libro/<int:pk>", detalles_libro.as_view(), name="libro"),
     path("autores/", lista_autores.as_view(), name="lista_de_autores"),
@@ -22,5 +23,5 @@ urlpatterns = [
     path("usuario/nuevo/", crear_usuario.as_view(), name="nuevo_usuario"),
     path("usuario/editar/<int:pk>", editar_usuario.as_view(), name="editar_el_usuario"),
     path("usuario/editar_contraseña/<int:pk>", editar_contraseña_usuario.as_view(), name="editar_la_contraseña_del_usuario"),
-    path("usuario/eliminar/<int:pk>", eliminar_usuario.as_view(), name="eliminar_el_usuario"),
+    path("usuario/desactivar/<int:pk>", desactivar_usuario.as_view(), name="desactivar_el_usuario"),
 ]
