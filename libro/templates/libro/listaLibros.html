@@ -21,9 +21,10 @@
         <label for="genero" class="barra-de-busqueda">Filtrar por genero:</label>
         <select name="genero" id="genero">
             <option value="">Cualquier genero</option>
-        {% for key, value in libro.CHOICES_GENERO %}
+        {% for key, value in generos.items %}
             <option value="{{ key }}">{{ value }}</option>
         {% endfor %}
+        </select>
         <button>Filtrar</button>
     </form>
     <table class="table">

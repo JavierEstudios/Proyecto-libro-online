@@ -9,12 +9,29 @@
     <h1><a href="{% url 'pagina_de_inicio' %}">Fabulivum</a></h1>
     <h2>Lista de libros</h2>
     <form action="{% url 'lista_de_libros_faceta_lector' %}" method="get">
+        <label for="titulo" class="barra-de-busqueda">Filtrar por titulo:</label>
+        <input type="text" id="titulo" name="titulo" placeholder="Titulo">
+        <label for="autor" class="barra-de-busqueda">Filtrar por autor:</label>
+        <select name="autor" id="autor">
+            <option value="">Cualquier autor</option>
+        {% for autor in autores %}
+            <option value="{{ autor.id }}">{{ autor.username }}</option>
+        {% endfor %}
+        </select>
+        <label for="genero" class="barra-de-busqueda">Filtrar por genero:</label>
+        <select name="genero" id="genero">
+            <option value="">Cualquier genero</option>
+        {% for key, value in generos.items %}
+            <option value="{{ key }}">{{ value }}</option>
+        {% endfor %}
+        </select>
         <label for="relacion" class="barra-de-busqueda">Filtrar por estado:</label>
         <select name="relacion" id="relacion">
             <option value="">Todos</option>
-        {% for key, value in opciones %}
+        {% for key, value in opciones.items %}
             <option value="{{ key }}">{{ value }}</option>
         {% endfor %}
+        </select>
         <button>Filtrar</button>
     </form>
     <table class="table">
