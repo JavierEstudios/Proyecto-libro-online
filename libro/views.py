@@ -14,14 +14,24 @@ class pagina_principal(TemplateView):
     template_name = "libro/main.html"
 
 ## Listas
-class lista_libros_lector(ListView):
+class lista_libros_lector(LoginRequiredMixin,ListView):
     model = Libro
     template_name = "libro/listaLibrosLector.html"
     
     def get_queryset(self):
         queryset = super().get_queryset()
+        usuario = Usuario.objects.get(id=self.request.user.id).pk
+        titulo = self.request.GET.get("titulo")
+        autor = self.request.GET.get("autor")
+        genero = self.request.GET.get("genero")
         relacion_lector = self.request.GET.get("relacion")
-        queryset = queryset.filter(lectores=self.kwargs['pk'])
+        queryset = queryset.filter(lector__id=usuario)
+        if titulo:
+            queryset = queryset.filter(titulo__icontains=titulo)
+        if autor:
+            queryset = queryset.filter(autor_libro__username__icontains=autor)
+        if genero:
+            queryset = queryset.filter(genero=genero)
         if relacion_lector:
             queryset = queryset.filter(lectores_libro__relacion=relacion_lector)
         queryset.order_by('inicio_publicacion')
@@ -30,9 +40,11 @@ class lista_libros_lector(ListView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["opciones"] = Lector_Libro.CHOICES_RELACION
+        contexto["generos"] = Libro.CHOICES_GENERO
+        contexto["autores"] = Usuario.objects.exclude(libro__isnull=True).order_by('username')
         return contexto
 
-class lista_libros_autor(ListView):
+class lista_libros_autor(LoginRequiredMixin,ListView):
     model = Libro
     template_name = "libro/listaLibrosAutor.html"
     
@@ -46,7 +58,7 @@ class lista_libros_autor(ListView):
         queryset.order_by('inicio_publicacion')
         return queryset
 
-class buscar_libros(ListView):
+class buscar_libros(LoginRequiredMixin,ListView):
     model = Libro
     template_name = "libro/listaLibros.html"
     
@@ -58,7 +70,7 @@ class buscar_libros(ListView):
         if titulo:
             queryset = queryset.filter(titulo__icontains=titulo)
         if autor:
-            queryset = queryset.filter(autor_libro__username__icontains=autor)
+            queryset = queryset.filter(autor__username__icontains=autor)
         if genero:
             queryset = queryset.filter(genero=genero)
         queryset.order_by('inicio_publicacion')
@@ -66,7 +78,8 @@ class buscar_libros(ListView):
     
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
-        contexto["autores"] = Usuario.objects.exclude(autor_libro__isnull=True).order_by('username')
+        contexto["generos"] = Libro.CHOICES_GENERO
+        contexto["autores"] = Usuario.objects.exclude(libro__isnull=True).order_by('username')
         return contexto
     
 class lista_autores(ListView):
@@ -75,7 +88,7 @@ class lista_autores(ListView):
     
     def get_queryset(self):
         busqueda = self.request.GET.get("nombre", default="")
-        return Usuario.objects.filter(username__icontains=busqueda).exclude(autor_libro__isnull=True).order_by('username')
+        return Usuario.objects.filter(username__icontains=busqueda).exclude(libro__isnull=True).order_by('username')
     
 ## Libros
 class detalles_libro(DetailView):

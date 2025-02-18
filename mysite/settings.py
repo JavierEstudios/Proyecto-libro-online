@@ -129,5 +129,5 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = "pagina_de_inicio"
-LOGOUT_REDIRECT_URL = "pagina_de_inicio"
+LOGIN_REDIRECT_URL = "/libros_lector/"
+LOGOUT_REDIRECT_URL = "/"
