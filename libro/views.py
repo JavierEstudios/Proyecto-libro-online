@@ -200,11 +200,6 @@ class editar_usuario(LoginRequiredMixin,UpdateView):
     model = Usuario
     form_class = EditarUsuarioForm
     template_name = "registration/editarUsuario.html"
-    
-class editar_contraseña_usuario(LoginRequiredMixin,UpdateView):
-    model = Usuario
-    form_class = EditarContraseñaUsuarioForm
-    template_name = "registration/editarContraseñaUsuario.html"
 
 # Preguntar la forma de desactivar un usuario
 class desactivar_usuario(LoginRequiredMixin,DeleteView):

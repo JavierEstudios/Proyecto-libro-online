@@ -21,23 +21,18 @@ class CapituloForm(forms.ModelForm):
 
 class NuevoUsuarioForm(forms.ModelForm):
     password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Repite la contraseña', widget=forms.PasswordInput)
-    
+
     class Meta:
         model = Usuario
-        fields = ['username', 'password', 'password2', 'email', 'imagen_perfil', 'sobre_mi']
+        fields = ['username', 'password', 'email', 'imagen_perfil', 'sobre_mi']
     
     def clean_password(self):
-        password = self.cleaned_data['password']
-        password2 = self.cleaned_data['password2']
-        if password != password2:
-            raise forms.ValidationError('Las contraseñas no coinciden')
-        else:
-            try:
-                validate_password(password, user=None, password_validators=None)
-            except forms.ValidationError as e:
-                self.add_error('password', e)
-            return password
+        password = self.cleaned_data.get('password')
+        try:
+            validate_password(password, user=None, password_validators=None)
+        except forms.ValidationError as e:
+            self.add_error('password', e)
+        return password
     
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -50,34 +45,3 @@ class EditarUsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = ['username', 'email', 'imagen_perfil', 'sobre_mi']
-        
-class EditarContraseñaUsuarioForm(forms.ModelForm):
-    opassword = forms.CharField(label='Contraseña antigua', widget=forms.PasswordInput)
-    password = forms.CharField(label='Contraseña nueva', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Repite la contraseña', widget=forms.PasswordInput)
-
-    class Meta:
-        model = Usuario
-        fields = ['opassword','password', 'password2']
-    
-    def clean_password(self):
-        opassword = self.cleaned_data['opassword']
-        password = self.cleaned_data['password']
-        password2 = self.cleaned_data['password2']
-        if not self.instance.check_password(opassword):
-            raise forms.ValidationError('La contraseña no es correcta')
-        elif password != password2:
-            raise forms.ValidationError('Las contraseñas no coinciden')
-        else:
-            try:
-                validate_password(password, user=None, password_validators=None)
-            except forms.ValidationError as e:
-                self.add_error('password', e)
-            return password
-    
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])
-        if commit:
-            user.save()
-        return user
