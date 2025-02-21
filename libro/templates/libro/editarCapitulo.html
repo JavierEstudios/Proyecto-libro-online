@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Editar {{ capitulo.titulo }}</h1>
+    <h2>Editar {{ capitulo.titulo }}</h2>
     <form method="POST" class="formularios">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Editar</button>

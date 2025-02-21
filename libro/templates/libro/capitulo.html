@@ -6,8 +6,8 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ capitulo.titulo }}</h1>
-    <h2><a href="{% url 'libro' pk=capitulo.libro.pk %}">{{ capitulo.libro.titulo }}</a> - {{ capitulo.autor.username }}</h2>
+    <h2>{{ capitulo.titulo }}</h2>
+    <h3><a href="{% url 'libro' pk=capitulo.libro.pk %}">{{ capitulo.libro.titulo }}</a> - {{ capitulo.autor.username }}</h3>
     {% for precuela in precuelas %}
         <p><a href="{% url 'capitulo' pk=precuela.pk numero=precuela.numero %}">{{ precuela.titulo }}</a></p>
     {% endfor %}

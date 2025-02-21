@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Nuevo capitulo</h1>
+    <h2>Nuevo capitulo</h2>
     <form method="POST" class="formularios">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Crear</button>

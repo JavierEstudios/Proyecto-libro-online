@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block content %}
-    <h1><a href="{% url 'pagina_de_inicio' %}">Fabulivum</a></h1>
     <h2>Lista de libros</h2>
     <form action="{% url 'lista_de_libros_faceta_lector' %}" method="get">
         <label for="titulo" class="barra-de-busqueda">Filtrar por titulo:</label>

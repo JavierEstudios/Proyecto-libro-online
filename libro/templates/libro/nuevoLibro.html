@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Nuevo libro</h1>
+    <h2>Nuevo libro</h2>
     <form method="POST" enctype="multipart/form-data" class="formularios">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Crear</button>

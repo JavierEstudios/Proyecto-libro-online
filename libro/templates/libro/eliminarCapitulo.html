@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Eliminar {{ capitulo.titulo }}</h1>
+    <h2>Eliminar {{ capitulo.titulo }}</h2>
     <form method="POST">{% csrf_token %}
         <p>¿Seguro que quieres hacerlo?</p>
         <button type="submit">Eliminar</button>
