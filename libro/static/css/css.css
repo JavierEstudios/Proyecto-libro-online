@@ -1,13 +1,16 @@
 body {
-    background-color: floralwhite;
+    background-image: url("/static/img/bg.jpg");
+    background-repeat: no-repeat;
     padding: 0em 2em;
     height: 100%;
 }
 #base {
-    background-color: ivory;
+    background-color: #FFFFF4;
 }
 h1, h2, h3 {
-    color: navy;
+    color: #38384E;
+    text-align: center;
+    margin-top: 1.2em;
 }
 h1.texto-pagina-inicio {
     font-size: 3em;
@@ -25,7 +28,7 @@ label.barra-de-busqueda {
     padding: 0.2em 0em;
 }
 input, textarea, select {
-    background-color: azure;
+    background-color: #E9DEE2;
 }
 input, button, textarea, select {
     border-radius: 0.4em;
@@ -45,8 +48,8 @@ input, button, textarea, select {
     background-color:inherit;
     border: none;
 }
-.boton-enlace, a {
-    color: darkslateblue;
+.boton-enlace, a, .nav-link {
+    color: #63434D;
 }
 a {
     text-decoration: none;
@@ -54,8 +57,8 @@ a {
 .list-group{
     margin: 0.5em 0em;
 }
-.list-group-item {
-    background-color: whitesmoke;
+.list-group-item, table.table tbody tr td, button {
+    background-color: #DEDEC8;
 }
 .item-lista-libros {
     margin: 0em 0.2em;
@@ -63,4 +66,7 @@ a {
 .imagenes {
     max-height: 20em;
     max-width: 100%;
+}
+nav, table.table thead tr th{
+    background-color: #B8B8C0;
 }
