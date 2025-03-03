@@ -98,8 +98,8 @@ class detalles_libro(DetailView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["capitulos"] = Capitulo.objects.filter(libro=self.kwargs['pk']).order_by('numero')
-        contexto["capitulos_leidos"] = Capitulo.objects.filter(libro=self.kwargs['pk'], lectores=self.request.user.id)
-        contexto["lectores"] = Usuario.objects.filter(lectores_libro=self.kwargs['pk'])
+        #contexto["capitulos_leidos"] = Capitulo.objects.filter(libro=self.kwargs['pk'], lectores=self.request.user.id)
+        contexto["lectores"] = Usuario.objects.filter(lector_libro=self.kwargs['pk'])
         return contexto
     
 def leyendo_libro(request, pk):
@@ -177,7 +177,7 @@ class leer_capitulo(DetailView):
         aux = Capitulo.objects.filter(conexiones=self.kwargs['pk']).order_by('fecha_publicacion')
         contexto["precuelas"] = aux.filter(numero__lt=self.kwargs['numero'])
         contexto["secuelas"] = aux.filter(numero__gt=self.kwargs['numero'])
-        contexto["lectores"] = Usuario.objects.filter(lectores_capitulo=self.kwargs['pk'])
+        #contexto["lectores"] = Usuario.objects.filter(lectores_capitulo=self.kwargs['pk'])
         return contexto
     
 def finalizar_lectura(request, pk, aux):
@@ -214,5 +214,5 @@ class detalles_usuario(DetailView):
     def get_context_data(self, **kwargs):
         libros = super().get_context_data(**kwargs)
         libros["libros_autor"] = Libro.objects.filter(autor=self.kwargs['pk']).order_by('inicio_publicacion')
-        libros["libros_lector"] = Libro.objects.filter(lectores=self.kwargs['pk']).order_by('inicio_publicacion')
+        libros["libros_lector"] = Libro.objects.filter(lector_libro=self.kwargs['pk']).order_by('inicio_publicacion')
         return libros

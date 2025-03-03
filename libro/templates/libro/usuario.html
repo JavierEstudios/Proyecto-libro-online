@@ -16,7 +16,8 @@
             <p>{{ usuario.sobre_mi }}</p>
             {% if usuario.pk == user.pk %}
                 <p class="menu-autor-libro"><a href="{% url 'editar_el_usuario' pk=usuario.pk %}">Editar</a></p>
-                <p class="menu-autor-libro"><a href="{% url 'eliminar_el_usuario' pk=usuario.pk %}">Eliminar</a></p>
+                <p class="menu-autor-libro"><a href="{% url 'password_change' %}">Cambiar la contraseña</a></p>
+                <p class="menu-autor-libro"><a href="{% url 'desactivar_el_usuario' pk=usuario.pk %}">Eliminar</a></p>
                 <p class="menu-autor-libro"><a href="{% url 'nuevo_libro' %}">Nuevo libro</a></p>
             {% endif %}
         </div>

@@ -19,7 +19,7 @@
                 <p><strong>Fin de publicación:</strong> {{ libro.fin_publicacion }}</p>
             {% endif %}
             {% if libro.autor == user %}
-                <p>{{ libro.lectores.count }} lector{% if libro.lectores.count != 1 %}es{% endif %}</p>
+                <p>{{ libro.lector.count }} lector{% if libro.lector.count != 1 %}es{% endif %}</p>
                 <p class="menu-autor-libro"><a href = "{% url 'editar_el_libro' pk=libro.pk %}">Editar libro</a></p>
                 {% if libro.fin_publicacion is empty %}
                     <p class="menu-autor-libro"><a href = "{% url 'nuevo_capitulo' libro=libro.pk %}">Nuevo Capitulo</a></p>
@@ -37,7 +37,6 @@
                     <p class="menu-autor-libro">Estás leyendo este libro</p>
                 {% endif %}
             {% endif %}
-            <p class="menu-autor-libro"><a href="{% url 'lista_de_libros' %}">Lista de libros</a></p>
             {% if not libro.autor == user %}
                 <p class="menu-autor-libro"><a href="{% url 'usuario' pk=libro.autor.pk %}">Perfil del autor</a></p>
             {% endif %}

@@ -1,12 +1,12 @@
 {% extends 'libro/base.html' %}
 
 {% block title %}
-    <title>Fabulivum - Lista de libros</title>
+    <title>Fabulivum - Tus libros</title>
     <meta name="author" content="Javier Farré Avilés">
 {% endblock %}
 
 {% block content %}
-    <h2>Lista de libros</h2>
+    <h2>Tus libros</h2>
     <form action="{% url 'lista_de_libros_faceta_autor' %}" method="get">
         <label for="estado" class="barra-de-busqueda">Filtrar por estado:</label>
         <select name="estado" id="estado">

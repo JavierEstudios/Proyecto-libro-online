@@ -11,22 +11,10 @@
     {% for precuela in precuelas %}
         <p><a href="{% url 'capitulo' pk=precuela.pk numero=precuela.numero %}">{{ precuela.titulo }}</a></p>
     {% endfor %}
-    <p>{{ capitulo.texto_principal|linebreaks }}</p>
+    <p class="poppins-regular">{{ capitulo.texto_principal|linebreaks }}</p>
     {% for secuela in secuelas %}
-        {% if user in lectores or user == capitulo.autor or not user.is_authenticated  %}
-            <p><a href="{% url 'capitulo' pk=secuela.pk numero=secuela.numero %}">{{ secuela.titulo }}</a></p>
-        {% else %}
-            <p><form action="{% url 'capitulo_leido' pk=capitulo.pk aux=secuela.pk %}" method="post">
-                {% csrf_token %}<button class="boton-enlace">{{ secuela.titulo }}</button>
-            </form></p>
-        {% endif %}
+        <p><a href="{% url 'capitulo' pk=secuela.pk numero=secuela.numero %}">{{ secuela.titulo }}</a></p>
     {% empty %}
-        {% if user in lectores or user == capitulo.autor or not user.is_authenticated %}
-            <p><a href="{% url 'libro' pk=capitulo.libro.pk %}">Capitulo terminado</a></p>
-        {% else %}
-            <p><form action="{% url 'capitulo_leido' pk=capitulo.pk aux=0 %}" method="post">
-                {% csrf_token %}<button class="boton-enlace">Capitulo terminado</button>
-            </form></p>
-        {% endif %}
+        <p><a href="{% url 'libro' pk=capitulo.libro.pk %}">Capitulo terminado</a></p>
     {% endfor %}
 {% endblock %}
