@@ -31,10 +31,10 @@
             {% elif user.is_authenticated  %}
                 {% if user not in lectores %}
                     <p><form action="{% url 'leyendo' pk=libro.pk %}" method="post" class="menu-autor-libro">{% csrf_token %}
-                        <button class="boton-enlace">Leyendo</button>
+                        <button class="boton-enlace">Añadir a la lista de lecturas</button>
                     </form></p>
                 {% else %}
-                    <p class="menu-autor-libro">Estás leyendo este libro</p>
+                    <p class="menu-autor-libro">El libro esta en la lista de lecturas.</p>
                 {% endif %}
             {% endif %}
             {% if not libro.autor == user %}
