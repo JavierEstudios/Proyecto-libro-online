@@ -35,7 +35,7 @@
                 <th scope="col">Genero</th>
                 <th scope="col">Fecha de publicación</th>
                 <th scope="col">Fecha de finalización</th>
-                <th scope="col">Estado</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -59,12 +59,12 @@
                 {% endif %}
                 <td>
                     <!--Los mensajes son provisionales.-->
-                    {% if user not in lectores %}
+                    {% if libro in libros_lector %}
+                        <p class="menu-autor-libro">Incluido en la lista de lecturas</p>
+                    {% else %}
                         <p><form action="{% url 'leyendo' pk=libro.pk %}" method="post" class="menu-autor-libro">{% csrf_token %}
                             <button class="boton-enlace">Incluir en la lista de lecturas</button>
                         </form></p>
-                    {% else %}
-                        <p class="menu-autor-libro">Incluido en la lista de lecturas</p>
                     {% endif %}
                 </td>
             </tr>
