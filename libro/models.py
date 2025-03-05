@@ -11,9 +11,14 @@ class Usuario(AbstractUser):
     
     def get_absolute_url(self):
         return reverse("usuario", kwargs={'pk':self.pk})
+    
+class Genero(models.Model):
+    nombre = models.CharField(max_length=50)
+    def __str__(self):
+        return self.nombre
 
 class Libro(models.Model):
-    CHOICES_GENERO = {"NAR": "Narrativa",
+    """CHOICES_GENERO = {"NAR": "Narrativa",
                         "FAN": "Fantasía",
                         "ROM": "Romance",
                         "TRO": "Terror",
@@ -33,10 +38,10 @@ class Libro(models.Model):
                         "COC": "Cocina",
                         "VIA": "Viajes",
                         "HUM": "Humor",
-                        "OTR": "Otros"}
+                        "OTR": "Otros"}"""
     titulo = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=2000)
-    genero = models.CharField(choices=CHOICES_GENERO, max_length=3)
+    genero = models.ForeignKey(Genero, on_delete=models.CASCADE)
     portada = models.ImageField(blank=True, upload_to="portadas_libros/")
     inicio_publicacion = models.DateField(auto_now_add=True)
     fin_publicacion = models.DateField(null=True, blank=True)
