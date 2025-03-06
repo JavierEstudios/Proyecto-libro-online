@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from libro.models import Usuario, Libro, Capitulo, Lector_Libro
+from libro.models import *
 
 class LectorLibroInLine(admin.TabularInline):
     model = Lector_Libro
@@ -16,3 +16,4 @@ class LibroAdmin(admin.ModelAdmin):
 admin.site.register(Usuario, UserAdmin)
 admin.site.register(Libro, LibroAdmin)
 admin.site.register(Capitulo)
+admin.site.register(Genero)
