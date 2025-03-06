@@ -83,7 +83,7 @@ class BuscarLibros(LoginRequiredMixin,ListView):
     
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
-        contexto["generos"] = Libro.CHOICES_GENERO
+        contexto["generos"] = Genero.objects.all().order_by('nombre')
         contexto["autores"] = Usuario.objects.exclude(libro__isnull=True).order_by('username')
         contexto["libros_lector"] = Libro.objects.filter(lector__id=self.request.user.id)
         return contexto

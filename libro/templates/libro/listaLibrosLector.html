@@ -9,26 +9,26 @@
     <h2>Lista de libros</h2>
     <form action="{% url 'lista_de_libros_faceta_lector' %}" method="get">
         <label for="titulo" class="barra-de-busqueda">Filtrar por titulo:</label>
-        <input type="text" id="titulo" name="titulo" placeholder="Titulo">
+        <input type="text" id="titulo" name="titulo" placeholder="Titulo" value="{{ request.GET.titulo }}">
         <label for="autor" class="barra-de-busqueda">Filtrar por autor:</label>
         <select name="autor" id="autor">
             <option value="">Cualquier autor</option>
         {% for autor in autores %}
-            <option value="{{ autor.id }}">{{ autor.username }}</option>
+            <option value="{{ autor.id }}" {% if request.GET.autor == autor.id|stringformat:"s" %}selected{% endif %}>{{ autor.username }}</option>
         {% endfor %}
         </select>
         <label for="genero" class="barra-de-busqueda">Filtrar por genero:</label>
         <select name="genero" id="genero">
             <option value="">Cualquier genero</option>
-        {% for key, value in generos.items %}
-            <option value="{{ key }}">{{ value }}</option>
-        {% endfor %}
+            {% for genero in generos %}
+                <option value="{{ genero.id }}" {% if request.GET.genero == genero.id|stringformat:"s" %}selected{% endif %}>{{ genero.value }}</option>
+            {% endfor %}
         </select>
         <label for="relacion" class="barra-de-busqueda">Filtrar por estado:</label>
         <select name="relacion" id="relacion">
             <option value="">Todos</option>
         {% for key, value in opciones.items %}
-            <option value="{{ key }}">{{ value }}</option>
+            <option value="{{ key }}" {% if request.GET.relacion == key|stringformat:"s" %}selected{% endif %}>{{ value }}</option>
         {% endfor %}
         </select>
         <button>Filtrar</button>
