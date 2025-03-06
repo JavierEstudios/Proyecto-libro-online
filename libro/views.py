@@ -13,8 +13,7 @@ def pagina_principal(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse("lista_de_libros_faceta_lector"))
     else:
-        return render(request, "libro/main.html")
-    
+        return render(request, "libro/main.html")    
 
 ## Listas
 class ListaLibrosLector(LoginRequiredMixin,ListView):
@@ -43,6 +42,7 @@ class ListaLibrosLector(LoginRequiredMixin,ListView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["opciones"] = Lector_Libro.CHOICES_RELACION
+        contexto["relaciones"] = Lector_Libro.objects.filter(lector=self.request.user)
         contexto["generos"] = Genero.objects.all().order_by('nombre')
         contexto["autores"] = Usuario.objects.exclude(libro__isnull=True).order_by('username')
         return contexto

@@ -65,9 +65,13 @@
                     <td>En publicacion</td>
                 {% endif %}
                 <td>
-                    {% for estado in libro.lectores_libro.all %}
-                        {% if estado.lector == request.user %}
-                            {{ estado.relacion }}
+                    {% for estado in relaciones %}
+                        {% if estado.libro == libro %}
+                            {% for key, value in opciones.items %}
+                                {% if estado.relacion == key %}
+                                    {{ value }}
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
                     {% endfor %}
                 </td>
