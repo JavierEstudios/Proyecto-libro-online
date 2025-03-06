@@ -3,9 +3,9 @@ from .views import *
 
 urlpatterns = [
     path("", pagina_principal, name="pagina_de_inicio"),
-    path("libros_lector/", ListaLibrosLector.as_view(), name="lista_de_libros_faceta_lector"),
-    path("libros_autor/", ListaLibrosAutor.as_view(), name="lista_de_libros_faceta_autor"),
-    path("libros_busqueda/", BuscarLibros.as_view(), name="busqueda_de_libros"),
+    path("lector/", ListaLibrosLector.as_view(), name="lista_de_libros_faceta_lector"),
+    path("autor/", ListaLibrosAutor.as_view(), name="lista_de_libros_faceta_autor"),
+    path("busqueda/", BuscarLibros.as_view(), name="busqueda_de_libros"),
     path("libro/<int:pk>", DetallesLibro.as_view(), name="libro"),
     path("autores/", ListaAutores.as_view(), name="lista_de_autores"),
     ##Libros
