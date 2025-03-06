@@ -7,12 +7,17 @@ body {
 #base {
     background-color: #FFFFF4;
 }
+p, a, button, th, td, label, select, input {
+    font-family: "Lato", serif;
+    font-weight: 400;
+    font-style: normal;
+}
 h1, h2, h3 {
     color: #38384E;
     text-align: center;
     margin-top: 1.2em;
 }
-h2, h3 {
+h2, h3, h3 a {
     font-family: "Kalam", serif;
     font-weight: 400;
     font-style: normal;
@@ -23,11 +28,6 @@ h1 {
     font-weight: 400;
     font-style: normal;
     font-size: 3em;
-}
-p, a, button, th, td, label, select, input {
-    font-family: "Lato", serif;
-    font-weight: 400;
-    font-style: normal;
 }
 h1.texto-pagina-inicio {
     font-size: 4em;
