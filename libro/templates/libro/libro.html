@@ -41,11 +41,9 @@
             <ol class="list-group list-group-numbered">
                 {% for capitulo in capitulos %}
                     <li class="list-group-item"><a href="{% url 'capitulo' pk=capitulo.pk numero=capitulo.numero %}">{{ capitulo.titulo }}</a>
-                        {% if capitulo.autor == user %}
+                        {% if libro.autor == user %}
                             - <a href="{% url 'editar_el_capitulo' pk=capitulo.pk %}">Editar capitulo</a>
                             - <a href="{% url 'eliminar_el_capitulo' pk=capitulo.pk %}">Eliminar capitulo</a>
-                        {% elif user.is_authenticated and capitulo in capitulos_leidos %}
-                            - Leido
                         {% endif %}
                     </li>
                 {% endfor %}
