@@ -175,7 +175,8 @@ class EditarCapitulo(LoginRequiredMixin,UpdateView):
 class EliminarCapitulo(LoginRequiredMixin,DeleteView):
     model = Capitulo
     template_name = "libro/eliminarCapitulo.html"
-    success_url = reverse_lazy("pagina_de_inicio")
+    def get_success_url(self):
+        return reverse('libro', kwargs={'pk':self.object.libro.pk})
     
 class LeerCapitulo(LoginRequiredMixin,DetailView):
     model = Capitulo
