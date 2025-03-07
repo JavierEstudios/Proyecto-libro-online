@@ -59,9 +59,9 @@
                 {% endif %}
                 <td>
                     <!--Los mensajes son provisionales.-->
-                    <p><form action="{% url 'leyendo' pk=libro.pk %}" method="post" class="menu-autor-libro">{% csrf_token %}
+                    <form action="{% url 'leyendo' pk=libro.pk %}" method="post" class="menu-autor-libro">{% csrf_token %}
                         <button class="boton-enlace">{% if libro not in libros_lector %}Incluir en la lista de lecturas{% else %}Excluir de la lista de lecturas{% endif %}</button>
-                    </form></p>
+                    </form>
                 </td>
             </tr>
         {% empty %}

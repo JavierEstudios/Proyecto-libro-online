@@ -67,6 +67,8 @@ input, button, textarea, select {
 .boton-enlace {
     background-color:inherit;
     border: none;
+    margin: 0;
+    padding: 0;
 }
 .boton-enlace, a, .nav-link {
     color: #63434D;
