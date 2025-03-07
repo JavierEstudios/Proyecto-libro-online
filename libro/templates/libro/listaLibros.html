@@ -21,7 +21,7 @@
         <select name="genero" id="genero">
             <option value="">Cualquier genero</option>
             {% for genero in generos %}
-                <option value="{{ genero.id }}" {% if request.GET.genero == genero.id|stringformat:"s" %}selected{% endif %}>{{ genero.value }}</option>
+                <option value="{{ genero.id }}" {% if request.GET.genero == genero.id|stringformat:"s" %}selected{% endif %}>{{ genero.nombre }}</option>
             {% endfor %}
         </select>
         <button>Filtrar</button>
@@ -59,13 +59,9 @@
                 {% endif %}
                 <td>
                     <!--Los mensajes son provisionales.-->
-                    {% if libro in libros_lector %}
-                        <p class="menu-autor-libro">Incluido en la lista de lecturas</p>
-                    {% else %}
-                        <p><form action="{% url 'leyendo' pk=libro.pk %}" method="post" class="menu-autor-libro">{% csrf_token %}
-                            <button class="boton-enlace">Incluir en la lista de lecturas</button>
-                        </form></p>
-                    {% endif %}
+                    <p><form action="{% url 'leyendo' pk=libro.pk %}" method="post" class="menu-autor-libro">{% csrf_token %}
+                        <button class="boton-enlace">{% if libro not in libros_lector %}Incluir en la lista de lecturas{% else %}Excluir de la lista de lecturas{% endif %}</button>
+                    </form></p>
                 </td>
             </tr>
         {% empty %}

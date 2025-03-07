@@ -21,7 +21,7 @@
         <select name="genero" id="genero">
             <option value="">Cualquier genero</option>
             {% for genero in generos %}
-                <option value="{{ genero.id }}" {% if request.GET.genero == genero.id|stringformat:"s" %}selected{% endif %}>{{ genero.value }}</option>
+                <option value="{{ genero.id }}" {% if request.GET.genero == genero.id|stringformat:"s" %}selected{% endif %}>{{ genero.nombre }}</option>
             {% endfor %}
         </select>
         <label for="relacion" class="barra-de-busqueda">Filtrar por estado:</label>
