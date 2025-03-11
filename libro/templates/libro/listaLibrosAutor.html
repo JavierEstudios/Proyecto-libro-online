@@ -11,8 +11,8 @@
         <label for="estado" class="barra-de-busqueda">Filtrar por estado:</label>
         <select name="estado" id="estado">
             <option value="">Ambos</option>
-            <option value="p" {% if request.GET.relacion == "p"|stringformat:"s" %}selected{% endif %}>En publicacion</option>
-            <option value="f" {% if request.GET.relacion == "f"|stringformat:"s" %}selected{% endif %}>Finalizado</option>
+            <option value="p" {% if request.GET.estado == "p"|stringformat:"s" %}selected{% endif %}>En publicacion</option>
+            <option value="f" {% if request.GET.estado == "f"|stringformat:"s" %}selected{% endif %}>Finalizado</option>
         </select>
         <button>Filtrar</button>
     </form>
