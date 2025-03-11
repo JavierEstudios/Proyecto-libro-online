@@ -30,8 +30,8 @@
                 <p class="menu-autor-libro"><a href="{% url 'eliminar_el_libro' pk=libro.pk %}">Eliminar libro</a></p>
             {% else  %}
                 <!--Los mensajes son provisionales.-->
-                <p><form action="{% url 'leyendo' pk=libro.pk %}" method="post" class="menu-autor-libro">{% csrf_token %}
-                    <button class="boton-enlace">{% if libro not in libros_lector %}Incluir en la lista de lecturas{% else %}Excluir de la lista de lecturas{% endif %}</button>
+                <p><form action="{% url 'leyendo' pk=libro.pk pg=0 %}" method="post" class="menu-autor-libro">{% csrf_token %}
+                    <button>{% if libro not in libros_lector %}Incluir en la lista de lecturas{% else %}Excluir de la lista de lecturas{% endif %}</button>
                 </form></p>
                 <p class="menu-autor-libro"><a href="{% url 'usuario' pk=libro.autor.pk %}">Perfil del autor</a></p>
             {% endif %}

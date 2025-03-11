@@ -12,7 +12,7 @@ urlpatterns = [
     path("libro/nuevo/", CrearLibro.as_view(), name="nuevo_libro"),
     path("libro/editar/<int:pk>", EditarLibro.as_view(), name="editar_el_libro"),
     path("libro/eliminar/<int:pk>", EliminarLibro.as_view(), name="eliminar_el_libro"),
-    path("libro/<int:pk>/leyendo", seguir_libro, name="leyendo"),
+    path("libro/<int:pk>/leyendo/<int:pg>", seguir_libro, name="leyendo"),
     path("libro/<int:pk>/fin_publicacion", fin_publicacion, name="fin_de_publicacion"),
     ##Capitulos
     path("capitulo/<int:pk>/<int:numero>", LeerCapitulo.as_view(), name="capitulo"),
