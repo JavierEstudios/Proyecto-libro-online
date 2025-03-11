@@ -14,6 +14,7 @@ urlpatterns = [
     path("libro/eliminar/<int:pk>", EliminarLibro.as_view(), name="eliminar_el_libro"),
     path("libro/<int:pk>/leyendo/<int:pg>", seguir_libro, name="leyendo"),
     path("libro/<int:pk>/fin_publicacion", fin_publicacion, name="fin_de_publicacion"),
+    path("libro/<int:pk>/cambio/<int:id>", cambiar_relacion, name="cambiar_la_relacion"),
     ##Capitulos
     path("capitulo/<int:pk>/<int:numero>", LeerCapitulo.as_view(), name="capitulo"),
     path("capitulo_leido/<int:pk>/<int:aux>", finalizar_lectura, name="capitulo_leido"),

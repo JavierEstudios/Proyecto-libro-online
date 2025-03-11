@@ -106,7 +106,11 @@ class DetallesLibro(LoginRequiredMixin,DetailView):
         contexto["capitulos"] = Capitulo.objects.filter(libro=self.kwargs['pk']).order_by('numero')
         #contexto["capitulos_leidos"] = Capitulo.objects.filter(libro=self.kwargs['pk'], lectores=self.request.user.id)
         contexto["lectores"] = Usuario.objects.filter(lector_libro=self.kwargs['pk'])
-        contexto["libros_lector"] = Libro.objects.filter(lector__id=self.request.user.id)
+        contexto["opciones"] = Lector_Libro.CHOICES_RELACION
+        try:
+            contexto["rel_lector"] = Lector_Libro.objects.filter(lector=self.request.user).filter(libro=self.kwargs['pk']).get()
+        except:
+            contexto["rel_lector"] = None
         return contexto
     
 def seguir_libro(request, pk, pg):
@@ -120,6 +124,14 @@ def seguir_libro(request, pk, pg):
         return HttpResponseRedirect(reverse('busqueda_de_libros'))
     else:
         return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk}))
+
+def cambiar_relacion(request, pk, id):
+    lector = Usuario.objects.get(id=id)
+    libro = Libro.objects.get(pk=pk)
+    relacion = Lector_Libro.objects.get(lector=lector, libro=libro)
+    relacion.relacion = request.POST.get("relacion")
+    relacion.save()
+    return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk}))
     
 class CrearLibro(LoginRequiredMixin,CreateView):
     model = Libro
