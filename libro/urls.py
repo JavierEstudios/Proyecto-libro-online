@@ -6,9 +6,9 @@ urlpatterns = [
     path("lector/", ListaLibrosLector.as_view(), name="lista_de_libros_faceta_lector"),
     path("autor/", ListaLibrosAutor.as_view(), name="lista_de_libros_faceta_autor"),
     path("busqueda/", BuscarLibros.as_view(), name="busqueda_de_libros"),
-    path("libro/<int:pk>", DetallesLibro.as_view(), name="libro"),
     path("autores/", ListaAutores.as_view(), name="lista_de_autores"),
     ##Libros
+    path("libro/<int:pk>", DetallesLibro.as_view(), name="libro"),
     path("libro/nuevo/", CrearLibro.as_view(), name="nuevo_libro"),
     path("libro/editar/<int:pk>", EditarLibro.as_view(), name="editar_el_libro"),
     path("libro/eliminar/<int:pk>", EliminarLibro.as_view(), name="eliminar_el_libro"),
