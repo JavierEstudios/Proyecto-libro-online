@@ -242,5 +242,5 @@ class DetallesUsuario(LoginRequiredMixin,DetailView):
     def get_context_data(self, **kwargs):
         libros = super().get_context_data(**kwargs)
         libros["libros_autor"] = Libro.objects.filter(autor=self.kwargs['pk']).order_by('inicio_publicacion')
-        libros["libros_lector"] = Libro.objects.filter(lector_libro=self.kwargs['pk']).order_by('inicio_publicacion')
+        libros["libros_lector"] = Libro.objects.filter(lector__id=self.kwargs['pk']).order_by('inicio_publicacion')
         return libros
