@@ -1,15 +1,16 @@
 {% extends 'registration/base.html' %}
 
 {% block title %}
-    <title>Fabulivum - Eliminar {{ usuario.username }}</title>
+    <title>Fabulivum - Desactivar {{ usuario.username }}</title>
     <meta name="author" content="Javier Farré Avilés">
 {% endblock %}
 
 {% block content %}
-    <h1>Eliminar {{ usuario.username }}</h1>
+    <h1>Desactivar {{ usuario.username }}</h1>
     <form method="POST">{% csrf_token %}
-        <p>Esto es una acción irreversible que no solo implica la eliminación de la cuenta sino que tambien incluye eliminar todos los libros que tiene  asociados. ¿Seguro que quieres hacerlo?</p>
-        <a href="{% url 'registration:perfil' usuario.id %}">Cancelar</a>
-        <button type="submit">Eliminar</button>
+        <p>Desmarque la casilla para desactivar este perfil de usuario.</p>
+        {{ form.as_p }}
+        <a href="{% url 'usuario' pk=usuario.pk %}">Cancelar</a>
+        <button type="submit">Desactivar</button>
     </form>
 {% endblock %}

@@ -229,9 +229,10 @@ class EditarUsuario(LoginRequiredMixin,UpdateView):
     template_name = "registration/editarUsuario.html"
 
 # Preguntar la forma de desactivar un usuario
-class DesactivarUsuario(LoginRequiredMixin,DeleteView):
+class DesactivarUsuario(LoginRequiredMixin,UpdateView):
     model = Usuario
     template_name = "registration/eliminarUsuario.html"
+    fields = ['is_active']
     success_url = reverse_lazy("pagina_de_inicio")
     
 class DetallesUsuario(LoginRequiredMixin,DetailView):
