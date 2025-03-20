@@ -8,8 +8,7 @@
 {% block content %}
     <h1>Desactivar {{ usuario.username }}</h1>
     <form method="POST">{% csrf_token %}
-        <p>Desmarque la casilla para desactivar este perfil de usuario.</p>
-        {{ form.as_p }}
+        <p>Desmarque la casilla para desactivar este perfil de usuario. <input type="checkbox" name="is_active" id="id_is_active" checked></p>
         <a href="{% url 'usuario' pk=usuario.pk %}">Cancelar</a>
         <button type="submit">Desactivar</button>
     </form>

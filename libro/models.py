@@ -18,27 +18,6 @@ class Genero(models.Model):
         return self.nombre
 
 class Libro(models.Model):
-    """CHOICES_GENERO = {"NAR": "Narrativa",
-                        "FAN": "Fantasía",
-                        "ROM": "Romance",
-                        "TRO": "Terror",
-                        "SCI": "Ciencia Ficción",
-                        "MIS": "Misterio",
-                        "AUC": "Autobiografía",
-                        "BIO": "Biografía",
-                        "ENS": "Ensayo",
-                        "POE": "Poesía",
-                        "HIS": "Histórico",
-                        "POL": "Político",
-                        "REL": "Religioso",
-                        "CUL": "Cultura",
-                        "ART": "Arte",
-                        "CIE": "Ciencia",
-                        "DEP": "Deportes",
-                        "COC": "Cocina",
-                        "VIA": "Viajes",
-                        "HUM": "Humor",
-                        "OTR": "Otros"}"""
     titulo = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=2000)
     genero = models.ForeignKey(Genero, on_delete=models.CASCADE)
