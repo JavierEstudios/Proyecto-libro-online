@@ -10,6 +10,8 @@ from django.utils import timezone
 from libro.models import *
 from libro.forms import *
 
+PAGINATE_VALUE = 25
+
 def pagina_principal(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse("lista_de_libros_faceta_lector"))
@@ -20,6 +22,7 @@ def pagina_principal(request):
 class ListaLibrosLector(LoginRequiredMixin,ListView):
     model = Libro
     template_name = "libro/listaLibrosLector.html"
+    paginate_by = PAGINATE_VALUE
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -51,6 +54,7 @@ class ListaLibrosLector(LoginRequiredMixin,ListView):
 class ListaLibrosAutor(LoginRequiredMixin,ListView):
     model = Libro
     template_name = "libro/listaLibrosAutor.html"
+    paginate_by = PAGINATE_VALUE
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -66,6 +70,7 @@ class ListaLibrosAutor(LoginRequiredMixin,ListView):
 class BuscarLibros(LoginRequiredMixin,ListView):
     model = Libro
     template_name = "libro/listaLibros.html"
+    paginate_by = PAGINATE_VALUE
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -85,7 +90,7 @@ class BuscarLibros(LoginRequiredMixin,ListView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["generos"] = Genero.objects.all().order_by('nombre')
-        contexto["autores"] = Usuario.objects.exclude(libro__isnull=True).order_by('username')
+        contexto["autores"] = Usuario.objects.exclude(libro__isnull=True).exclude(id=self.request.user.id).order_by('username')
         contexto["libros_lector"] = Libro.objects.filter(lector__id=self.request.user.id)
         return contexto
     
