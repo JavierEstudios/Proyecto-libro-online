@@ -5,6 +5,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from libro.models import *
 from libro.forms import *
@@ -112,7 +113,8 @@ class DetallesLibro(LoginRequiredMixin,DetailView):
         except:
             contexto["rel_lector"] = None
         return contexto
-    
+
+@login_required
 def seguir_libro(request, pk, pg):
     lector = Usuario.objects.get(id=request.user.id)
     libro = Libro.objects.get(pk=pk)
@@ -125,6 +127,7 @@ def seguir_libro(request, pk, pg):
     else:
         return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk}))
 
+@login_required
 def cambiar_relacion(request, pk, id):
     lector = Usuario.objects.get(id=id)
     libro = Libro.objects.get(pk=pk)
@@ -146,7 +149,8 @@ class EditarLibro(LoginRequiredMixin,UpdateView):
     model = Libro
     form_class = LibroForm
     template_name = "libro/editarLibro.html"
-    
+
+@login_required
 def fin_publicacion(request, pk):
     libro = Libro.objects.get(pk=pk)
     hoy = timezone.localtime(timezone.now())
@@ -205,7 +209,8 @@ class LeerCapitulo(LoginRequiredMixin,DetailView):
         contexto["secuelas"] = aux.filter(numero__gt=self.kwargs['numero'])
         #contexto["lectores"] = Usuario.objects.filter(lectores_capitulo=self.kwargs['pk'])
         return contexto
-    
+
+@login_required
 def finalizar_lectura(request, pk, aux):
     lector = Usuario.objects.get(id=request.user.id)
     capitulo = Capitulo.objects.get(pk=pk)
@@ -238,9 +243,3 @@ class DesactivarUsuario(LoginRequiredMixin,UpdateView):
 class DetallesUsuario(LoginRequiredMixin,DetailView):
     model = Usuario
     template_name = "libro/usuario.html"
-    
-    def get_context_data(self, **kwargs):
-        libros = super().get_context_data(**kwargs)
-        libros["libros_autor"] = Libro.objects.filter(autor=self.kwargs['pk']).order_by('inicio_publicacion')
-        libros["libros_lector"] = Libro.objects.filter(lector__id=self.kwargs['pk']).order_by('inicio_publicacion')
-        return libros
