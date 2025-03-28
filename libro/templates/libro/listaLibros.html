@@ -17,10 +17,10 @@
             <option value="{{ autor.id }}" {% if request.GET.autor == autor.id|stringformat:"s" %}selected{% endif %}>{{ autor.username }}</option>
         {% endfor %}
         </select>
-        <label for="genero" class="barra-de-busqueda">Filtrar por genero:</label>
+        <label for="genero" class="barra-de-busqueda">Filtrar por género:</label>
         <select name="genero" id="genero">
-            <option value="">Cualquier genero</option>
-            {% for genero in generos %}
+            <option value="">Cualquier género</option>
+            {% for genero in géneros %}
                 <option value="{{ genero.id }}" {% if request.GET.genero == genero.id|stringformat:"s" %}selected{% endif %}>{{ genero.nombre }}</option>
             {% endfor %}
         </select>
@@ -32,7 +32,7 @@
                 <th scope="col">Portada</th>
                 <th scope="col">Titulo</th>
                 <th scope="col">Autor</th>
-                <th scope="col">Genero</th>
+                <th scope="col">Género</th>
                 <th scope="col">Fecha de publicación</th>
                 <th scope="col">Fecha de finalización</th>
                 <th scope="col">Acciones</th>
