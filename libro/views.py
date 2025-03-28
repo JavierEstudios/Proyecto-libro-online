@@ -110,9 +110,17 @@ class DetallesLibro(LoginRequiredMixin,DetailView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["capitulos"] = Capitulo.objects.filter(libro=self.kwargs['pk']).order_by('numero')
-        #contexto["capitulos_leidos"] = Capitulo.objects.filter(libro=self.kwargs['pk'], lectores=self.request.user.id)
+        contexto["capitulos_leidos"] = Capitulo.objects.filter(libro=self.kwargs['pk'], lectores=self.request.user.id)
         contexto["lectores"] = Usuario.objects.filter(lector_libro=self.kwargs['pk'])
         contexto["opciones"] = Lector_Libro.CHOICES_RELACION
+        try:
+            contexto["capitulo_seleccionado"] = contexto["capitulos"].get(pk=self.kwargs['capk'])
+        except:
+            contexto["capitulo_seleccionado"] = None
+        else:
+            aux = Capitulo.objects.filter(conexiones=self.kwargs['pk']).order_by('fecha_publicacion')
+            contexto["precuelas"] = aux.filter(numero__lt=contexto["capitulo_seleccionado"].numero)
+            contexto["secuelas"] = aux.filter(numero__gt=contexto["capitulo_seleccionado"].numero)
         try:
             contexto["rel_lector"] = Lector_Libro.objects.filter(lector=self.request.user).filter(libro=self.kwargs['pk']).get()
         except:
@@ -131,15 +139,6 @@ def seguir_libro(request, pk, pg):
         return HttpResponseRedirect(reverse('busqueda_de_libros'))
     else:
         return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk}))
-
-@login_required
-def cambiar_relacion(request, pk, id):
-    lector = Usuario.objects.get(id=id)
-    libro = Libro.objects.get(pk=pk)
-    relacion = Lector_Libro.objects.get(lector=lector, libro=libro)
-    relacion.relacion = request.POST.get("relacion")
-    relacion.save()
-    return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk}))
     
 class CrearLibro(LoginRequiredMixin,CreateView):
     model = Libro
@@ -174,9 +173,17 @@ class CrearCapitulo(LoginRequiredMixin,CreateView):
     form_class = CapituloForm
     template_name = "libro/nuevoCapitulo.html"
     
+    def get_success_url(self):
+        return reverse('libro', kwargs={'pk':self.object.libro.pk, 'capk':self.object.pk})
+    
     def form_valid(self, form):
         form.instance.autor = self.request.user
         form.instance.libro = get_object_or_404(Libro, pk=self.kwargs['libro'])
+        for lector in form.instance.libro.lector.all():
+            relacion = Lector_Libro.objects.get(lector=lector, libro=form.instance.libro)
+            if relacion.relacion == "F":
+                relacion.relacion = "L"
+                relacion.save()
         return super().form_valid(form)
     
     #Propuesta de Jose Ignacio para filtrar los capitulos por el libro al que pertenecen
@@ -189,6 +196,9 @@ class EditarCapitulo(LoginRequiredMixin,UpdateView):
     model = Capitulo
     form_class = CapituloForm
     template_name = "libro/editarCapitulo.html"
+    
+    def get_success_url(self):
+        return reverse('libro', kwargs={'pk':self.object.libro.pk, 'capk':self.object.pk})
 
     #Propuesta de Jose Ignacio para filtrar los capitulos por el libro al que pertenecen, modificada para encajar en esta vista
     def get_form_kwargs(self):
@@ -201,30 +211,22 @@ class EliminarCapitulo(LoginRequiredMixin,DeleteView):
     model = Capitulo
     template_name = "libro/eliminarCapitulo.html"
     def get_success_url(self):
-        return reverse('libro', kwargs={'pk':self.object.libro.pk})
-    
-class LeerCapitulo(LoginRequiredMixin,DetailView):
-    model = Capitulo
-    template_name = "libro/capitulo.html"
-
-    def get_context_data(self, **kwargs):
-        contexto = super().get_context_data(**kwargs)
-        aux = Capitulo.objects.filter(conexiones=self.kwargs['pk']).order_by('fecha_publicacion')
-        contexto["precuelas"] = aux.filter(numero__lt=self.kwargs['numero'])
-        contexto["secuelas"] = aux.filter(numero__gt=self.kwargs['numero'])
-        #contexto["lectores"] = Usuario.objects.filter(lectores_capitulo=self.kwargs['pk'])
-        return contexto
+        return reverse('libro', kwargs={'pk':self.object.libro.pk, 'capk':self.object.pk})
 
 @login_required
-def finalizar_lectura(request, pk, aux):
+def finalizar_lectura(request, pk, capk, aux):
     lector = Usuario.objects.get(id=request.user.id)
-    capitulo = Capitulo.objects.get(pk=pk)
+    capitulo = Capitulo.objects.get(pk=aux)
     capitulo.lectores.add(lector)
-    if aux > 0:
-        secuela = Capitulo.objects.get(pk=aux)
-        return HttpResponseRedirect(reverse('capitulo', kwargs={'pk':aux, 'numero':secuela.numero}))
-    else:
-        return HttpResponseRedirect(reverse('libro', kwargs={'pk':capitulo.libro.pk}))
+    libro = Libro.objects.get(pk=pk)
+    relacion = Lector_Libro.objects.get(lector=lector, libro=libro)
+    if relacion.relacion == "P":
+        relacion.relacion = "L"
+        relacion.save()
+    elif libro.capitulo_set.filter(lectores=lector).count() == libro.capitulo_set.count():
+        relacion.relacion = "F"
+        relacion.save()
+    return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk, 'capk':capk}))
 
 ## Usuarios
 class CrearUsuario(CreateView):
@@ -238,7 +240,6 @@ class EditarUsuario(LoginRequiredMixin,UpdateView):
     form_class = EditarUsuarioForm
     template_name = "registration/editarUsuario.html"
 
-# Preguntar la forma de desactivar un usuario
 class DesactivarUsuario(LoginRequiredMixin,UpdateView):
     model = Usuario
     template_name = "registration/eliminarUsuario.html"

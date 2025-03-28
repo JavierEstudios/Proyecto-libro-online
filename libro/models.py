@@ -37,12 +37,10 @@ class Capitulo(models.Model):
     texto_principal = models.TextField()
     fecha_publicacion = models.DateField(auto_now_add=True)
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
+    lectores = models.ManyToManyField(Usuario, blank=True)
     conexiones = models.ManyToManyField("self", blank=True)
     def __str__(self):
         return f"{self.titulo} - {self.libro.titulo}"
-    
-    def get_absolute_url(self):
-        return reverse("capitulo", kwargs={'pk':self.pk, 'numero':self.numero})
     
 class Lector_Libro(models.Model):
     CHOICES_RELACION = {"P": "Pendiente",
@@ -51,4 +49,3 @@ class Lector_Libro(models.Model):
     relacion = models.CharField(choices=CHOICES_RELACION, default="P", max_length=1)
     lector = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
-    
