@@ -1,4 +1,4 @@
-{% extends 'libro/base.html' %}
+{% extends 'registration/base.html' %}
 
 {% block title %}
     <title>Fabulivum - {{ libro.titulo }}</title>
@@ -7,63 +7,98 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-md-4">    
-            <h2>{{ libro.titulo }}</h2>
-            {% if libro.portada %}
-                <p><img class="imagenes" src="{{ libro.portada.url }}" alt="Portada de {{ libro.titulo }}"></p>
-            {% endif %}
-            <h3>Sinopsis</h3>
-            <p>{{ libro.descripcion }}</p>
-            <p><strong>Inicio de publicación:</strong> {{ libro.inicio_publicacion }}</p>
-            {% if libro.fin_publicacion is not empty %}
-                <p><strong>Fin de publicación:</strong> {{ libro.fin_publicacion }}</p>
-            {% endif %}
-            {% if libro.autor == user %}
-                <p>{{ libro.lector.count }} lector{% if libro.lector.count != 1 %}es{% endif %}</p>
-                <p class="menu-autor-libro"><a href = "{% url 'editar_el_libro' pk=libro.pk %}">Editar libro</a></p>
-                {% if libro.fin_publicacion is empty %}
-                    <p class="menu-autor-libro"><a href = "{% url 'nuevo_capitulo' libro=libro.pk %}">Nuevo Capitulo</a></p>
-                    <p><form action="{% url 'fin_de_publicacion' pk=libro.pk %}" method="post" class="menu-autor-libro">{% csrf_token %}
-                        <button class="boton-enlace">Fin de publicación</button>
-                    </form></p>
+        <div class="position-sticky">
+            <div class="position-absolute top-0 start-50 translate-middle-x">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'lista_de_libros_faceta_lector' %}">Lector</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lista_de_libros_faceta_autor' %}">Autor</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <h1>{{ libro.titulo }}</h1>
+            <div class="col-md-4">
+                <div class="position-sticky">
+                {% if libro.portada %}
+                    <p><img class="imagenes" src="{{ libro.portada.url }}" alt="Portada de {{ libro.titulo }}"></p>
                 {% endif %}
-                <p class="menu-autor-libro"><a href="{% url 'eliminar_el_libro' pk=libro.pk %}">Eliminar libro</a></p>
-            {% else  %}
-                <!--Los mensajes son provisionales.-->
-                {% if rel_lector is not null %}
-                    {% for key, value in opciones.items %}
-                        {% if rel_lector.relacion == key %}
-                            <p>{{ value }}</p>
-                        {% endif %}
-                    {% endfor %}
-                    <p><form action="{% url 'cambiar_la_relacion' pk=libro.pk id=user.pk %}" method="post" class="menu-autor-libro">{% csrf_token %}
-                        <label for="relacion" class="barra-de-busqueda">Estado de la relacion</label>
-                        <select name="relacion" id="relacion">
+                <h2>Sinopsis</h2>
+                <p>{{ libro.descripcion }}</p>
+                <p><strong>Inicio de publicación:</strong> {{ libro.inicio_publicacion }}</p>
+                {% if libro.fin_publicacion is not empty %}
+                    <p><strong>Fin de publicación:</strong> {{ libro.fin_publicacion }}</p>
+                {% endif %}
+                {% if libro.autor == user %}
+                    <p>{{ libro.lector.count }} lector{% if libro.lector.count != 1 %}es{% endif %}</p>
+                    <p class="menu-autor-libro"><a href = "{% url 'editar_el_libro' pk=libro.pk %}">Editar libro</a></p>
+                    {% if libro.fin_publicacion is empty %}
+                        <p class="menu-autor-libro"><a href = "{% url 'nuevo_capitulo' libro=libro.pk %}">Nuevo Capitulo</a></p>
+                        <p><form action="{% url 'fin_de_publicacion' pk=libro.pk %}" method="post" class="menu-autor-libro">{% csrf_token %}
+                            <button class="boton-enlace">Fin de publicación</button>
+                        </form></p>
+                    {% endif %}
+                    <p class="menu-autor-libro"><a href="{% url 'eliminar_el_libro' pk=libro.pk %}">Eliminar libro</a></p>
+                {% else  %}
+                    <!--Los mensajes son provisionales.-->
+                    {% if rel_lector is not null %}
                         {% for key, value in opciones.items %}
-                            <option value="{{ key }}" {% if rel_lector.relacion == key|stringformat:"s" %}selected{% endif %}>{{ value }}</option>
+                            {% if rel_lector.relacion == key %}
+                                <p>{{ value }}</p>
+                            {% endif %}
                         {% endfor %}
-                        </select>
-                        <button>Cambiar</button>
+                    {% endif %}
+                    <p><form action="{% url 'leyendo' pk=libro.pk pg=0 %}" method="post" class="menu-autor-libro">{% csrf_token %}
+                        <button>{% if libro != rel_lector.libro %}Incluir en la lista de lecturas{% else %}Excluir de la lista de lecturas{% endif %}</button>
                     </form></p>
+                    <p class="menu-autor-libro"><a href="{% url 'usuario' pk=libro.autor.pk %}">Perfil del autor</a></p>
                 {% endif %}
-                <p><form action="{% url 'leyendo' pk=libro.pk pg=0 %}" method="post" class="menu-autor-libro">{% csrf_token %}
-                    <button>{% if libro != rel_lector.libro %}Incluir en la lista de lecturas{% else %}Excluir de la lista de lecturas{% endif %}</button>
-                </form></p>
-                <p class="menu-autor-libro"><a href="{% url 'usuario' pk=libro.autor.pk %}">Perfil del autor</a></p>
-            {% endif %}
+                <h2>Capitulos</h2>
+                <ol class="list-group list-group-numbered">
+                    {% for capitulo in capitulos %}
+                        <li class="list-group-item"><a href="{% url 'libro' pk=libro.pk capk=capitulo.pk %}">{{ capitulo.titulo }}</a>
+                            {% if libro.autor == user %}
+                                - <a href="{% url 'editar_el_capitulo' pk=capitulo.pk %}">Editar capitulo</a>
+                                - <a href="{% url 'eliminar_el_capitulo' pk=capitulo.pk %}">Eliminar capitulo</a>
+                            {% elif capitulo in capitulos_leidos %}
+                                 Leido
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ol>
+            </div>
         </div>
         <div class="col-md-8">
-            <h3>Capitulos</h3>
-            <ol class="list-group list-group-numbered">
-                {% for capitulo in capitulos %}
-                    <li class="list-group-item"><a href="{% url 'capitulo' pk=capitulo.pk numero=capitulo.numero %}">{{ capitulo.titulo }}</a>
-                        {% if libro.autor == user %}
-                            - <a href="{% url 'editar_el_capitulo' pk=capitulo.pk %}">Editar capitulo</a>
-                            - <a href="{% url 'eliminar_el_capitulo' pk=capitulo.pk %}">Eliminar capitulo</a>
-                        {% endif %}
-                    </li>
+            {% if capitulo_seleccionado %}
+                <h2>{{ capitulo_seleccionado.titulo }}</h2>
+                {% for precuela in precuelas %}
+                    {% if capitulo_seleccionado.numero > precuela.numero %}
+                        <p><a href="{% url 'libro' pk=libro.pk capk=precuela.pk %}">{{ precuela.titulo }}</a></p>
+                    {% endif %}
                 {% endfor %}
-            </ol>
+                <p class="poppins-regular">{{ capitulo_seleccionado.texto_principal|linebreaks }}</p>
+                {% for secuela in secuelas %}
+                    {% if capitulo_seleccionado.numero < secuela.numero %}
+                        {% if user in capitulo_seleccionado.lectores or user == libro.autor %}
+                            <p><a href="{% url 'libro' pk=libro.pk capk=secuela.pk %}">{{ secuela.titulo }}</a></p>
+                        {% else %}
+                            <p><form action="{% url 'capitulo_leido' pk=libro.pk capk=secuela.pk aux=capitulo_seleccionado.pk %}" method="post">
+                                {% csrf_token %}<button class="boton-enlace">{{ secuela.titulo }}</button>
+                            </form></p>
+                        {% endif %}
+                    {% endif %}
+                {% empty %}
+                    {% if user in capitulo_seleccionado.lectores or user == libro.autor %}
+                        <p><a href="{% url 'libro' pk=libro.pk capk=0 %}">Capitulo terminado</a></p>
+                    {% else %}
+                        <p><form action="{% url 'capitulo_leido' pk=libro.pk capk=0 aux=capitulo_seleccionado.pk %}" method="post">
+                            {% csrf_token %}<button class="boton-enlace">Capitulo terminado</button>
+                        </form></p>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
