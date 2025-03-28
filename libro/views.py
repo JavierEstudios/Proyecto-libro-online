@@ -94,14 +94,6 @@ class BuscarLibros(LoginRequiredMixin,ListView):
         contexto["libros_lector"] = Libro.objects.filter(lector__id=self.request.user.id)
         return contexto
     
-class ListaAutores(LoginRequiredMixin,ListView):
-    model = Usuario
-    template_name = "libro/listaAutores.html"
-    
-    def get_queryset(self):
-        busqueda = self.request.GET.get("nombre", default="")
-        return Usuario.objects.filter(username__icontains=busqueda).exclude(libro__isnull=True).order_by('username')
-    
 ## Libros
 class DetallesLibro(LoginRequiredMixin,DetailView):
     model = Libro

@@ -6,7 +6,6 @@ urlpatterns = [
     path("lector/", ListaLibrosLector.as_view(), name="lista_de_libros_faceta_lector"),
     path("autor/", ListaLibrosAutor.as_view(), name="lista_de_libros_faceta_autor"),
     path("busqueda/", BuscarLibros.as_view(), name="busqueda_de_libros"),
-    path("autores/", ListaAutores.as_view(), name="lista_de_autores"),
     ##Libros
     path("libro/<int:pk>/<int:capk>/", DetallesLibro.as_view(), name="libro"),
     path("libro/nuevo/", CrearLibro.as_view(), name="nuevo_libro"),
