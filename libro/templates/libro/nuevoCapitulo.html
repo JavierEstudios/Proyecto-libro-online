@@ -1,12 +1,12 @@
 {% extends 'libro/base.html' %}
 
 {% block title %}
-    <title>Fabulivum - Nuevo capitulo</title>
+    <title>Fabulivum - Nuevo capítulo</title>
     <meta name="author" content="Javier Farré Avilés">
 {% endblock %}
 
 {% block content %}
-    <h2>Nuevo capitulo</h2>
+    <h2>Nuevo capítulo</h2>
     <form method="POST" class="formularios">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Crear</button>

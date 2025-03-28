@@ -12,6 +12,9 @@ p, a, button, th, td, label, select, input {
     font-weight: 400;
     font-style: normal;
 }
+tr {
+    border-bottom: dashed #B8B8C0;
+}
 h1, h2, h3 {
     color: #38384E;
     text-align: center;
@@ -32,8 +35,12 @@ h1 {
 h1.texto-pagina-inicio {
     font-size: 4em;
 }
-.texto-pagina-inicio, .menu-autor-libro {
+.texto-pagina-inicio, .menu-autor-libro, footer {
     text-align: center;
+}
+.barra-de-navegacion div {
+    margin: auto;
+    width: 152px;
 }
 p.texto-pagina-inicio {
     font-size: 2em;
@@ -75,10 +82,10 @@ input, button, textarea, select {
 a {
     text-decoration: none;
 }
-.list-group{
+.list-group {
     margin: 0.5em 0em;
 }
-.list-group-item, table.table tbody tr td, button {
+.list-group-item, table.table tbody tr td {
     background-color: #DEDEC8;
 }
 .item-lista-libros {
@@ -93,7 +100,7 @@ a {
     max-width: 100%;
     border-radius: 50%;
 }
-nav, table.table thead tr th{
+nav, table.table thead tr th, button, .barra-de-navegacion, footer {
     background-color: #B8B8C0;
 }
 .lato-regular {

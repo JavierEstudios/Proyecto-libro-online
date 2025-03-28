@@ -60,7 +60,7 @@
                 <td>
                     <!--Los mensajes son provisionales.-->
                     <form action="{% url 'leyendo' pk=libro.pk pg=1 %}" method="post" class="menu-autor-libro">{% csrf_token %}
-                        <button>{% if libro not in libros_lector %}Incluir en la lista de lecturas{% else %}Excluir de la lista de lecturas{% endif %}</button>
+                        <button class="{% if libro not in libros_lector %}text-success">Incluir en la lista de lecturas.{% else %}text-danger">Excluir de la lista de lecturas.{% endif %}</button>
                     </form>
                 </td>
             </tr>

@@ -7,11 +7,11 @@
 
 {% block content %}
     <div class="row">
-        <div class="position-sticky">
-            <div class="position-absolute top-0 start-50 translate-middle-x">
+        <div class="barra-de-navegacion">
+            <div>
                 <ul class="nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'lista_de_libros_faceta_lector' %}">Lector</a>
+                        <a class="nav-link" href="{% url 'lista_de_libros_faceta_lector' %}">Lector</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'lista_de_libros_faceta_autor' %}">Autor</a>
@@ -51,17 +51,17 @@
                         {% endfor %}
                     {% endif %}
                     <p><form action="{% url 'leyendo' pk=libro.pk pg=0 %}" method="post" class="menu-autor-libro">{% csrf_token %}
-                        <button>{% if libro != rel_lector.libro %}Incluir en la lista de lecturas{% else %}Excluir de la lista de lecturas{% endif %}</button>
+                        <button class="{% if libro != rel_lector.libro %}text-success">Incluir en la lista de lecturas.{% else %}text-danger">Excluir de la lista de lecturas.{% endif %}</button>
                     </form></p>
                     <p class="menu-autor-libro"><a href="{% url 'usuario' pk=libro.autor.pk %}">Perfil del autor</a></p>
                 {% endif %}
-                <h2>Capitulos</h2>
+                <h2>Capítulos</h2>
                 <ol class="list-group list-group-numbered">
                     {% for capitulo in capitulos %}
                         <li class="list-group-item"><a href="{% url 'libro' pk=libro.pk capk=capitulo.pk %}">{{ capitulo.titulo }}</a>
                             {% if libro.autor == user %}
-                                - <a href="{% url 'editar_el_capitulo' pk=capitulo.pk %}">Editar capitulo</a>
-                                - <a href="{% url 'eliminar_el_capitulo' pk=capitulo.pk %}">Eliminar capitulo</a>
+                                - <a href="{% url 'editar_el_capitulo' pk=capitulo.pk %}">Editar capítulo</a>
+                                - <a href="{% url 'eliminar_el_capitulo' pk=capitulo.pk %}">Eliminar capítulo</a>
                             {% elif capitulo in capitulos_leidos %}
                                  Leido
                             {% endif %}
@@ -91,10 +91,10 @@
                     {% endif %}
                 {% empty %}
                     {% if user in capitulo_seleccionado.lectores or user == libro.autor %}
-                        <p><a href="{% url 'libro' pk=libro.pk capk=0 %}">Capitulo terminado</a></p>
+                        <p><a href="{% url 'libro' pk=libro.pk capk=0 %}">Capítulo terminado</a></p>
                     {% else %}
                         <p><form action="{% url 'capitulo_leido' pk=libro.pk capk=0 aux=capitulo_seleccionado.pk %}" method="post">
-                            {% csrf_token %}<button class="boton-enlace">Capitulo terminado</button>
+                            {% csrf_token %}<button class="boton-enlace">Capítulo terminado</button>
                         </form></p>
                     {% endif %}
                 {% endfor %}
