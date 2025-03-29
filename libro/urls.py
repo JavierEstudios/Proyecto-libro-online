@@ -18,6 +18,7 @@ urlpatterns = [
     path("capitulo/nuevo/<int:libro>/", CrearCapitulo.as_view(), name="nuevo_capitulo"),
     path("capitulo/editar/<int:pk>/", EditarCapitulo.as_view(), name="editar_el_capitulo"),
     path("capitulo/eliminar/<int:pk>/", EliminarCapitulo.as_view(), name="eliminar_el_capitulo"),
+    path("comprobacion/<int:pk>/", comprobar_lectura_finalizada, name="comprobacion"),
     ##Usuarios
     path("usuario/<int:pk>/", DetallesUsuario.as_view(), name="usuario"),
     path("usuario/nuevo/", CrearUsuario.as_view(), name="nuevo_usuario"),

@@ -202,8 +202,23 @@ class EditarCapitulo(LoginRequiredMixin,UpdateView):
 class EliminarCapitulo(LoginRequiredMixin,DeleteView):
     model = Capitulo
     template_name = "libro/eliminarCapitulo.html"
+    
     def get_success_url(self):
-        return reverse('libro', kwargs={'pk':self.object.libro.pk, 'capk':self.object.pk})
+        return reverse('comprobacion', kwargs={'pk':self.object.libro.pk})
+
+@login_required
+def comprobar_lectura_finalizada(request, pk):
+    numeroCapitulos = Capitulo.objects.filter(libro=pk).count()
+    for lector in Usuario.objects.filter(lector_libro__libro=pk):
+        relacion = Lector_Libro.objects.get(lector=lector, libro=pk)
+        if numeroCapitulos > 0:
+            if relacion.relacion == "L" and numeroCapitulos == Capitulo.objects.filter(libro=pk, lectores=lector).count():
+                relacion.relacion = "F"
+                relacion.save()
+        else:
+            relacion.relacion = "P"
+            relacion.save()
+    return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk, 'capk':0}))
 
 @login_required
 def finalizar_lectura(request, pk, capk, aux):
