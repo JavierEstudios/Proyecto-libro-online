@@ -110,7 +110,7 @@ class DetallesLibro(LoginRequiredMixin,DetailView):
         except:
             contexto["capitulo_seleccionado"] = None
         else:
-            aux = Capitulo.objects.filter(conexiones=self.kwargs['pk']).order_by('fecha_publicacion')
+            aux = contexto["capitulos"].filter(conexiones=contexto["capitulo_seleccionado"])
             contexto["precuelas"] = aux.filter(numero__lt=contexto["capitulo_seleccionado"].numero)
             contexto["secuelas"] = aux.filter(numero__gt=contexto["capitulo_seleccionado"].numero)
         try:

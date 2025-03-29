@@ -74,20 +74,16 @@
             {% if capitulo_seleccionado %}
                 <h2>{{ capitulo_seleccionado.titulo }}</h2>
                 {% for precuela in precuelas %}
-                    {% if capitulo_seleccionado.numero > precuela.numero %}
-                        <p><a href="{% url 'libro' pk=libro.pk capk=precuela.pk %}">{{ precuela.titulo }}</a></p>
-                    {% endif %}
+                    <p><a href="{% url 'libro' pk=libro.pk capk=precuela.pk %}">{{ precuela.titulo }}</a></p>
                 {% endfor %}
                 <p class="poppins-regular">{{ capitulo_seleccionado.texto_principal|linebreaks }}</p>
                 {% for secuela in secuelas %}
-                    {% if capitulo_seleccionado.numero < secuela.numero %}
-                        {% if user in capitulo_seleccionado.lectores or user == libro.autor %}
-                            <p><a href="{% url 'libro' pk=libro.pk capk=secuela.pk %}">{{ secuela.titulo }}</a></p>
-                        {% else %}
-                            <p><form action="{% url 'capitulo_leido' pk=libro.pk capk=secuela.pk aux=capitulo_seleccionado.pk %}" method="post">
-                                {% csrf_token %}<button class="boton-enlace">{{ secuela.titulo }}</button>
-                            </form></p>
-                        {% endif %}
+                    {% if user in capitulo_seleccionado.lectores or user == libro.autor %}
+                        <p><a href="{% url 'libro' pk=libro.pk capk=secuela.pk %}">{{ secuela.titulo }}</a></p>
+                    {% else %}
+                        <p><form action="{% url 'capitulo_leido' pk=libro.pk capk=secuela.pk aux=capitulo_seleccionado.pk %}" method="post">
+                            {% csrf_token %}<button class="boton-enlace">{{ secuela.titulo }}</button>
+                        </form></p>
                     {% endif %}
                 {% empty %}
                     {% if user in capitulo_seleccionado.lectores or user == libro.autor %}
