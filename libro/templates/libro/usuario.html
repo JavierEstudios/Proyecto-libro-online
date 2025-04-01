@@ -14,10 +14,10 @@
         <h3>Sobre mí</h3>
         <p>{{ usuario.sobre_mi }}</p>
         {% if usuario.pk == user.pk %}
-            <p class="menu-autor-libro"><a href="{% url 'editar_el_usuario' pk=usuario.pk %}">Editar</a></p>
-            <p class="menu-autor-libro"><a href="{% url 'password_change' %}">Cambiar la contraseña</a></p>
-            <p class="menu-autor-libro"><a href="{% url 'desactivar_el_usuario' pk=usuario.pk %}">Desactivar</a></p>
-            <p class="menu-autor-libro"><a href="{% url 'nuevo_libro' %}">Nuevo libro</a></p>
+            <p class="menu-autor-libro"><a class="enlace-boton" href="{% url 'editar_el_usuario' pk=usuario.pk %}">Editar</a></p>
+            <p class="menu-autor-libro"><a class="enlace-boton" href="{% url 'password_change' %}">Cambiar la contraseña</a></p>
+            <p class="menu-autor-libro"><a class="enlace-boton" href="{% url 'desactivar_el_usuario' pk=usuario.pk %}">Desactivar</a></p>
+            <p class="menu-autor-libro"><a class="enlace-boton" href="{% url 'nuevo_libro' %}">Nuevo libro</a></p>
         {% endif %}
     </div>
 {% endblock %}

@@ -9,7 +9,7 @@
     <h2>Eliminar {{ capitulo.titulo }}</h2>
     <form method="POST">{% csrf_token %}
         <p>¿Seguro que quieres hacerlo?</p>
-        <a href="{% url 'libro' pk=capitulo.libro.pk capk=0 %}">Cancelar</a>
+        <a class="enlace-boton" href="{% url 'libro' pk=capitulo.libro.pk capk=0 %}">Cancelar</a>
         <button type="submit">Eliminar</button>
     </form>
 {% endblock %}

@@ -101,7 +101,7 @@ class DetallesLibro(LoginRequiredMixin,DetailView):
     
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
-        contexto["capitulos"] = Capitulo.objects.filter(libro=self.kwargs['pk']).order_by('numero')
+        contexto["capitulos"] = Capitulo.objects.filter(libro=self.kwargs['pk']).order_by("fecha_publicacion").order_by('numero')
         contexto["capitulos_leidos"] = Capitulo.objects.filter(libro=self.kwargs['pk'], lectores=self.request.user.id)
         contexto["lectores"] = Usuario.objects.filter(lector_libro=self.kwargs['pk'])
         contexto["opciones"] = Lector_Libro.CHOICES_RELACION
@@ -110,9 +110,10 @@ class DetallesLibro(LoginRequiredMixin,DetailView):
         except:
             contexto["capitulo_seleccionado"] = None
         else:
+            contexto["lectores_capitulo"] = contexto["capitulo_seleccionado"].lectores.all()
             aux = contexto["capitulos"].filter(conexiones=contexto["capitulo_seleccionado"])
             contexto["precuelas"] = aux.filter(numero__lt=contexto["capitulo_seleccionado"].numero)
-            contexto["secuelas"] = aux.filter(numero__gt=contexto["capitulo_seleccionado"].numero)
+            contexto["secuelas"] = aux.filter(numero__gte=contexto["capitulo_seleccionado"].numero)
         try:
             contexto["rel_lector"] = Lector_Libro.objects.filter(lector=self.request.user).filter(libro=self.kwargs['pk']).get()
         except:
@@ -125,12 +126,14 @@ def seguir_libro(request, pk, pg):
     libro = Libro.objects.get(pk=pk)
     if lector.libros.filter(pk=pk).exists():
         lector.libros.remove(libro)
+        for capitulo in Capitulo.objects.filter(libro=libro):
+            capitulo.lectores.remove(lector)
     else:
         lector.libros.add(libro)
     if pg == 1:
         return HttpResponseRedirect(reverse('busqueda_de_libros'))
     else:
-        return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk}))
+        return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk, 'capk':0}))
     
 class CrearLibro(LoginRequiredMixin,CreateView):
     model = Libro

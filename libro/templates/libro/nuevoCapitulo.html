@@ -7,6 +7,7 @@
 
 {% block content %}
     <h2>Nuevo capítulo</h2>
+    <p>El campo numero sirve para indicar el orden con respecto a los capítulos a los que está enlazado.<br>El campo conexiones indica a que capítulos está enlazado.</p>
     <form method="POST" class="formularios">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Crear</button>

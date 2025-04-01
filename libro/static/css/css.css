@@ -35,6 +35,9 @@ h1 {
 h1.texto-pagina-inicio {
     font-size: 4em;
 }
+.texto-pagina-inicio {
+    margin: 0 5%;
+}
 .texto-pagina-inicio, .menu-autor-libro, footer {
     text-align: center;
 }
@@ -57,8 +60,12 @@ label.barra-de-busqueda {
 input, textarea, select {
     background-color: #E9DEE2;
 }
-input, button, textarea, select {
+input, button, textarea, select, .enlace-boton {
     border-radius: 0.4em;
+}
+button, .enlace-boton {
+    padding: 4px;
+    border-style: none;
 }
 .formularios input, .formularios textarea, .formularios select {
     width: 100%;
@@ -100,7 +107,7 @@ a {
     max-width: 100%;
     border-radius: 50%;
 }
-nav, table.table thead tr th, button, .barra-de-navegacion, footer {
+nav, table.table thead tr th, button, .barra-de-navegacion, footer, .enlace-boton {
     background-color: #B8B8C0;
 }
 .lato-regular {

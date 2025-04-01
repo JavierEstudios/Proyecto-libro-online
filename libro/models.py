@@ -29,7 +29,7 @@ class Libro(models.Model):
         return self.titulo
     
     def get_absolute_url(self):
-        return reverse("libro", kwargs={'pk':self.pk})
+        return reverse("libro", kwargs={'pk':self.pk, 'capk':0})
     
 class Capitulo(models.Model):
     titulo = models.CharField(max_length=50)
