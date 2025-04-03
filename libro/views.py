@@ -155,7 +155,7 @@ def fin_publicacion(request, pk):
     hoy = timezone.localtime(timezone.now())
     libro.fin_publicacion = hoy.date()
     libro.save()
-    return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk}))
+    return HttpResponseRedirect(reverse('libro', kwargs={'pk':pk, 'capk':0}))
 
 class EliminarLibro(LoginRequiredMixin,DeleteView):
     model = Libro
